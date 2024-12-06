@@ -81,7 +81,7 @@ export default function LoginPage() {
           });
           console.log("WE ARE NOT RETURNING")
           // return;
-        } else {
+        } else if  (scope){
         const userScopes = scope.split(",");
         if (userScopes.includes(SCOPES.DASHBOARD)) {
           navigate("/dashboard/home", {
