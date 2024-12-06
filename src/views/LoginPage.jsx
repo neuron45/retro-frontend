@@ -79,8 +79,8 @@ export default function LoginPage() {
           navigate("/dashboard/home", {
             replace: true,
           });
-          console.log("IN  /dashboard/home !!!")
-          return;
+          console.log("WE ARE NOT RETURNING")
+          // return;
         }
         const userScopes = scope.split(",");
         if (userScopes.includes(SCOPES.DASHBOARD)) {
@@ -94,7 +94,7 @@ export default function LoginPage() {
           });
         }
 
-        return;
+        // return;
       } else {
         const message = res.data.message;
         toast.dismiss();
