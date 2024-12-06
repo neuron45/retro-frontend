@@ -27,6 +27,7 @@ export default function LoginPage() {
         navigate("/dashboard/home", {
           replace: true,
         });
+        console.log("IN /dashboard/home");
         return;
       }
       const userScopes = scope.split(",");

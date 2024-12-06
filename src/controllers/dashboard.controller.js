@@ -5,6 +5,7 @@ const fetcher = (url) => ApiClient.get(url).then((res) => res.data);
 
 export function useDashboard() {
   const APIURL = `/dashboard`;
+  console.log("IN useDashboard /dashboard");
   const { data, error, isLoading } = useSWR(APIURL, fetcher);
   return {
     data,
