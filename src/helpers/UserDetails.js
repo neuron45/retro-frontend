@@ -1,5 +1,6 @@
 const KEY = 'restroprosaas_user'
 export function saveUserDetailsInLocalStorage(user) {
+    console.log({saving: user})
     localStorage.setItem(KEY, JSON.stringify(user));
 }
 

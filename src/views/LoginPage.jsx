@@ -24,8 +24,6 @@ export default function LoginPage() {
         return;
       }
       if (role == "admin") {
-        console.log("IN /dashboard/home");
-
         navigate("/dashboard/home", {
           replace: true,
         });
@@ -76,10 +74,12 @@ export default function LoginPage() {
         saveUserDetailsInLocalStorage(user);
 
         const { role, scope } = getUserDetailsInLocalStorage();
+        console.log({role, scope});
         if (role == "admin") {
           navigate("/dashboard/home", {
             replace: true,
           });
+          console.log("IN /dashboard/home")
           return;
         }
         const userScopes = scope.split(",");
