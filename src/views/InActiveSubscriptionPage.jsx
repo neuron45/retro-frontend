@@ -1,8 +1,8 @@
 import Page from "../components/Page"
 import Logo from "../assets/logo.svg";
-import { iconStroke, stripeProductSubscriptionId, subscriptionPrice } from '../config/config';
+import { iconStroke, subscriptionPrice } from '../config/config';
 import React from "react";
-import { getStripeSubscriptionURL, signOut } from "../controllers/auth.controller";
+import { signOut } from "../controllers/auth.controller";
 import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { getUserDetailsInLocalStorage } from "../helpers/UserDetails";
@@ -14,20 +14,20 @@ export default function InActiveSubscriptionPage() {
 
   const btnSubscribe = async () => {
     toast.loading("Please wait...")
-    try {
-      const res = await getStripeSubscriptionURL(stripeProductSubscriptionId);
-      toast.dismiss();
+    // try {
+    //   const res = await getStripeSubscriptionURL(stripeProductSubscriptionId);
+    //   toast.dismiss();
 
-      if(res.status == 200) {
-        const data = res.data;
-        window.location.href = data.url;
-      }
-    } catch (error) {
-      const message = error?.response?.data?.message || "Can't retrieve the product subscription, Please try after sometime!";
-      console.error(error);
-      toast.dismiss();
-      toast.error(message);
-    }
+    //   if(res.status == 200) {
+    //     const data = res.data;
+    //     window.location.href = data.url;
+    //   }
+    // } catch (error) {
+    //   const message = error?.response?.data?.message || "Can't retrieve the product subscription, Please try after sometime!";
+    //   console.error(error);
+    //   toast.dismiss();
+    //   toast.error(message);
+    // }
   }
 
   return (

@@ -8,7 +8,7 @@ export const iconStroke = 1.5;
 export const supportEmail = "hi@uiflow.in";
 export const appVersion = "1.2.0";
 
-export const subscriptionAmount = 5;
+export const subscriptionAmount = 500;
 export const subscriptionPrice = "$" + subscriptionAmount;
 
-export const stripeProductSubscriptionId = import.meta.env.VITE_STRIPE_PRODUCT_SUBSCRIPTION_KEY;
+// export const stripeProductSubscriptionId = import.meta.env.VITE_STRIPE_PRODUCT_SUBSCRIPTION_KEY;

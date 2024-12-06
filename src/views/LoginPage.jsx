@@ -74,14 +74,12 @@ export default function LoginPage() {
         saveUserDetailsInLocalStorage(user);
 
         const { role, scope } = getUserDetailsInLocalStorage();
-        console.log({role, scope});
         if (role == "admin") {
           navigate("/dashboard/home", {
             replace: true,
           });
-          console.log("WE ARE NOT RETURNING")
-          // return;
-        } else if  (scope){
+          return;
+        }
         const userScopes = scope.split(",");
         if (userScopes.includes(SCOPES.DASHBOARD)) {
           navigate("/dashboard/home", {
@@ -93,9 +91,8 @@ export default function LoginPage() {
             replace: true,
           });
         }
-      }
 
-        // return;
+        return;
       } else {
         const message = res.data.message;
         toast.dismiss();

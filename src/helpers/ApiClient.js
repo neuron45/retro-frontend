@@ -25,10 +25,11 @@ apiClient.interceptors.response.use(
     const user = getUserDetailsInLocalStorage();
     const role = user?.role || "";
 
-    if(error.response.status === 402) { // payment required, subscription is not active
-      window.location.href = "/dashboard/inactive-subscription"
-      return;
-    }
+    // TODO: REMOVE
+    // if(error.response.status === 402) { // payment required, subscription is not active
+    //   window.location.href = "/dashboard/inactive-subscription"
+    //   return;
+    // }
 
     if ((error.response.status === 401 || error.response.status === 403) && !originalRequest._retry) {
       originalRequest._retry = true;

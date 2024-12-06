@@ -69,17 +69,17 @@ export async function resetPassword(token, password) {
     }
 }
 
-export async function getStripeSubscriptionURL(productLookupKey) {
-    axios.defaults.withCredentials = true;
-    try {
-        const response = await ApiClient.post(`${API}/auth/stripe-product-lookup`, {
-            id: productLookupKey
-        });
-        return response;
-    } catch (error) {
-        throw error;
-    }
-}
+// export async function getStripeSubscriptionURL(productLookupKey) {
+//     axios.defaults.withCredentials = true;
+//     try {
+//         const response = await ApiClient.post(`${API}/auth/stripe-product-lookup`, {
+//             id: productLookupKey
+//         });
+//         return response;
+//     } catch (error) {
+//         throw error;
+//     }
+// }
 
 
 const fetcher = (url) => ApiClient.get(url).then((res) => res.data);
