@@ -15,6 +15,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     const restroAuthenticated = isRestroUserAuthenticated();
+    console.log({restroAuthenticated})
     if (restroAuthenticated) {
       const { role, scope } = getUserDetailsInLocalStorage();
       if (role == "superadmin") {
@@ -99,6 +100,7 @@ export default function LoginPage() {
         const message = res.data.message;
         toast.dismiss();
         toast.error(message);
+        console.error(message)
         return;
       }
     } catch (error) {
