@@ -24,6 +24,7 @@ export default function LoginPage() {
         return;
       }
       if (role == "admin") {
+        console.log("DID WE GET IN HERE !!!")
         navigate("/dashboard/home", {
           replace: true,
         });
