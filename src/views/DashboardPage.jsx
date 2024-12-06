@@ -27,6 +27,8 @@ export default function DashboardPage() {
     reservations, topSellingItems, ordersCount, newCustomerCount, repeatedCustomerCount, currency:currencyCode
   } = data;
 
+  console.log({dahsboardData: data});
+
   const currency = CURRENCIES.find((c)=>c.cc==currencyCode);
 
   return (
