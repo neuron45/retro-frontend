@@ -24,10 +24,11 @@ export default function LoginPage() {
         return;
       }
       if (role == "admin") {
+        console.log("IN /dashboard/home");
+
         navigate("/dashboard/home", {
           replace: true,
         });
-        console.log("IN /dashboard/home");
         return;
       }
       const userScopes = scope.split(",");
