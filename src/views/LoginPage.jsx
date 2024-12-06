@@ -15,7 +15,6 @@ export default function LoginPage() {
 
   useEffect(() => {
     const restroAuthenticated = isRestroUserAuthenticated();
-    console.log({restroAuthenticated})
     if (restroAuthenticated) {
       const { role, scope } = getUserDetailsInLocalStorage();
       if (role == "superadmin") {
@@ -75,12 +74,10 @@ export default function LoginPage() {
         saveUserDetailsInLocalStorage(user);
 
         const { role, scope } = getUserDetailsInLocalStorage();
-        console.log({role, scope});
         if (role == "admin") {
           navigate("/dashboard/home", {
             replace: true,
           });
-          console.log("IN /dashboard/home")
           return;
         }
         const userScopes = scope.split(",");

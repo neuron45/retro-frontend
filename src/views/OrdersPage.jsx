@@ -137,7 +137,6 @@ export default function OrdersPage() {
     const audio = new Audio("/new_order_sound.mp3");
     if (isSocketConnected) {
       socket.on("new_order", (payload) => {
-        console.log(payload);
         // textToSpeech(`New order received, token number: ${payload}`)
         audio.play();
         refreshOrders();
