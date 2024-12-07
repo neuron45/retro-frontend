@@ -5,6 +5,7 @@ import { iconStroke } from "../config/config";
 import { Link } from "react-router-dom";
 import { useDashboard } from '../controllers/dashboard.controller';
 import { CURRENCIES } from "../config/currencies.config";
+import { getImageURL } from '../helpers/ImageHelper';
 
 export default function DashboardPage() {
 
@@ -26,8 +27,6 @@ export default function DashboardPage() {
   const { 
     reservations, topSellingItems, ordersCount, newCustomerCount, repeatedCustomerCount, currency:currencyCode
   } = data;
-
-  console.log({dahsboardData: data});
 
   const currency = CURRENCIES.find((c)=>c.cc==currencyCode);
 
@@ -116,9 +115,13 @@ export default function DashboardPage() {
             topSellingItems?.length > 0 && <div className='px-6 flex flex-col'>
             {/* item */}
             {topSellingItems.map((item,i)=>{
+
+              const imageURL = item.image ? getImageURL(item.image) : null;
               return <div className='mb-4 flex items-center gap-2 w-full' key={i}>
                 <div className="bg-gray-100 text-gray-500 flex items-center justify-center w-12 h-12 rounded-lg">
-                  <IconCarrot stroke={iconStroke} />
+                  
+                  {!imageURL && <IconCarrot stroke={iconStroke} /> }
+                  { imageURL && <img src={imageURL} alt={item.title} className="top-0 left-0 rounded-lg" /> }
                 </div>
 
                 <div className='flex-1'>
