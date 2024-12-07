@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { mutate } from "swr";
 import { Link, useNavigate } from "react-router-dom";
 import { addMenuItem, deleteMenuItem, useMenuItems } from "../../controllers/menu_item.controller";
+import { getImageURL } from "../../helpers/ImageHelper";
 
 export default function MenuItemsSettingsPage() {
   const navigate = useNavigate();
@@ -140,7 +141,8 @@ export default function MenuItemsSettingsPage() {
 
       <div className="mt-8 w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
         {menuItems.map((menuItem, index) => {
-          const { id, title, price, net_price, tax_id, category_id, category_title, addons, variants } = menuItem;
+          const { id, title, price, net_price, tax_id, category_id, category_title, addons, variants, image } = menuItem;
+          const imageURL = image ? getImageURL(image) : null;
 
           return (
             <div
@@ -148,7 +150,8 @@ export default function MenuItemsSettingsPage() {
               className="border px-4 py-3 rounded-2xl flex flex-wrap items-center gap-2 text-sm"
             >
               <div className="w-12 h-12 rounded-full flex items-center justify-center bg-gray-100 text-gray-400">
-                <IconCarrot />
+              {!imageURL && <IconCarrot stroke={iconStroke} /> }
+              { imageURL && <img src={imageURL} alt={title} className="top-0 left-0 rounded-lg" /> }
               </div>
               <div className="flex-1">
                 <p>
