@@ -251,7 +251,7 @@ export default function CustomersPage() {
       {customers?.length == 0 && (
         <div className="w-full h-[calc(100vh-15vh)] flex gap-4 flex-col items-center justify-center">
           <img
-            src="/assets/illustrations/no-customers.svg"
+            src="/assets/illustrations/no-customers.jpg"
             alt="no customers"
             className="w-full md:w-60"
           />

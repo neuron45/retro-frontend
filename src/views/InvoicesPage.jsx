@@ -370,7 +370,7 @@ export default function InvoicesPage() {
       {invoices.length == 0 ? (
         <div className="text-center w-full h-[50vh] flex flex-col items-center justify-center text-gray-500">
           <img
-            src="/assets/illustrations/no-invoice.svg"
+            src="/assets/illustrations/no-invoice.png"
             alt="no invoices"
             className="w-full md:w-60"
           />

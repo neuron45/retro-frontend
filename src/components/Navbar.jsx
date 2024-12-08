@@ -15,7 +15,7 @@ import {
   IconUsersGroup,
 } from "@tabler/icons-react";
 import { clsx } from "clsx";
-import Logo from "../assets/logo.svg";
+import Logo from "../assets/logo2.svg";
 import AvatarImg from "../assets/avatar.png";
 import { iconStroke } from "../config/config";
 import { getUserDetailsInLocalStorage } from "../helpers/UserDetails";

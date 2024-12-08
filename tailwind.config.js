@@ -7,10 +7,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        'restro-green-light': "#ECF1EB",
-        'restro-green': "#70B56A",
-        'restro-green-dark': "#243922",
-        'restro-border-green-light': "#DCE7DB",
+        'restro-green-light': "#fff0f0",
+        'restro-green': "#FF4D4D",
+        'restro-green-dark': "#d14026",
+        'restro-border-green-light': "#ffe3e3",
         'restro-superadmin-widget-bg': "#BEDC74",
         'restro-superadmin-text-green': "#387F39",
         'restro-superadmin-text-black': "#444444"

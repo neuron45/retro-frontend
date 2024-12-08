@@ -472,7 +472,7 @@ export default function OrdersPage() {
       {kitchenOrders?.length == 0 && (
         <div className="w-full h-[calc(100vh-15vh)] flex gap-4 flex-col items-center justify-center">
           <img
-            src="/assets/illustrations/kitchen.svg"
+            src="/assets/illustrations/kitchen.jpg"
             alt="no orders"
             className="w-full md:w-60"
           />
