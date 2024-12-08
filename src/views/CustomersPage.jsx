@@ -418,7 +418,6 @@ export default function CustomersPage() {
               </option>
               <option value="female">Female</option>
               <option value="male">Male</option>
-              <option value="other">Other</option>
             </select>
           </div>
         </div>
@@ -433,7 +432,7 @@ export default function CustomersPage() {
               onClick={() => {
                 btnUpdate();
               }}
-              className="rounded-lg hover:bg-green-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3"
+              className="rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3"
             >
               Save
             </button>

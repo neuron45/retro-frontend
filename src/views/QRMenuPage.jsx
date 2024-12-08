@@ -701,7 +701,7 @@ export default function QRMenuPage() {
                     onClick={() => {
                       btnAddMenuItemToCartWithVariantsAndAddon();
                     }}
-                    className="w-full rounded-lg hover:bg-green-800 transition active:scale-95 hover:shadow-lg px-6 py-2 bg-restro-green text-white font-bold"
+                    className="w-full rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-6 py-2 bg-restro-green text-white font-bold"
                   >
                     ADD TO CART
                   </button>

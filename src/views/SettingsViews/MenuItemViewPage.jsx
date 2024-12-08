@@ -652,7 +652,7 @@ export default function MenuItemViewPage() {
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
               <button className="rounded-lg hover:bg-gray-200 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-gray-200 text-gray-500">Close</button>
-              <button onClick={()=>{btnAddVariant();}} className="rounded-lg hover:bg-green-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Save</button>
+              <button onClick={()=>{btnAddVariant();}} className="rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Save</button>
             </form>
           </div>
         </div>
@@ -681,7 +681,7 @@ export default function MenuItemViewPage() {
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
               <button className="rounded-lg hover:bg-gray-200 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-gray-200 text-gray-500">Close</button>
-              <button onClick={()=>{btnUpdateVariant();}} className="rounded-lg hover:bg-green-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Save</button>
+              <button onClick={()=>{btnUpdateVariant();}} className="rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Save</button>
             </form>
           </div>
         </div>
@@ -709,7 +709,7 @@ export default function MenuItemViewPage() {
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
               <button className="rounded-lg hover:bg-gray-200 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-gray-200 text-gray-500">Close</button>
-              <button onClick={()=>{btnAddAddon();}} className="rounded-lg hover:bg-green-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Save</button>
+              <button onClick={()=>{btnAddAddon();}} className="rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Save</button>
             </form>
           </div>
         </div>
@@ -738,7 +738,7 @@ export default function MenuItemViewPage() {
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
               <button className="rounded-lg hover:bg-gray-200 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-gray-200 text-gray-500">Close</button>
-              <button onClick={()=>{btnUpdateAddon();}} className="rounded-lg hover:bg-green-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Save</button>
+              <button onClick={()=>{btnUpdateAddon();}} className="rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Save</button>
             </form>
           </div>
         </div>

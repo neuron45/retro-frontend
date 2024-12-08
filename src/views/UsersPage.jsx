@@ -519,7 +519,7 @@ export default function UsersPage() {
                 onClick={() => {
                   btnAdd();
                 }}
-                className="rounded-lg hover:bg-green-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3"
+                className="rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3"
               >
                 Save
               </button>
@@ -680,7 +680,7 @@ export default function UsersPage() {
                 onClick={() => {
                   btnUpdate();
                 }}
-                className="rounded-lg hover:bg-green-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3"
+                className="rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3"
               >
                 Save
               </button>
@@ -741,7 +741,7 @@ export default function UsersPage() {
                 onClick={() => {
                   btnChangePassword();
                 }}
-                className="rounded-lg hover:bg-green-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3"
+                className="rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3"
               >
                 Save
               </button>

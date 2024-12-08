@@ -1019,7 +1019,7 @@ export default function POSPage() {
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
               <button className="rounded-lg hover:bg-gray-200 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-gray-200 text-gray-500">Close</button>
-              <button onClick={()=>{btnAddNotes();}} className="rounded-lg hover:bg-green-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Save</button>
+              <button onClick={()=>{btnAddNotes();}} className="rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Save</button>
             </form>
           </div>
         </div>
@@ -1045,7 +1045,7 @@ export default function POSPage() {
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
               <button onClick={()=>{btnClearSelectedCategory()}} className="rounded-lg hover:bg-gray-200 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-gray-200 text-gray-500">Close</button>
-              <button onClick={()=>{btnApplyCategoryFilter();}} className="rounded-lg hover:bg-green-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Apply</button>
+              <button onClick={()=>{btnApplyCategoryFilter();}} className="rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Apply</button>
             </form>
           </div>
         </div>
@@ -1090,7 +1090,7 @@ export default function POSPage() {
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
               <button className="rounded-lg hover:bg-gray-200 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-gray-200 text-gray-500">Close</button>
-              <button onClick={()=>{btnAddMenuItemToCartWithVariantsAndAddon()}} className="rounded-lg hover:bg-green-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Save</button>
+              <button onClick={()=>{btnAddMenuItemToCartWithVariantsAndAddon()}} className="rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Save</button>
             </form>
           </div>
         </div>
@@ -1112,7 +1112,7 @@ export default function POSPage() {
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
               <button className="rounded-lg hover:bg-gray-200 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-gray-200 text-gray-500">Close</button>
-              <button onClick={()=>{btnAddtoDrafts();}} className="rounded-lg hover:bg-green-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Save</button>
+              <button onClick={()=>{btnAddtoDrafts();}} className="rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Save</button>
             </form>
           </div>
         </div>
@@ -1224,7 +1224,7 @@ export default function POSPage() {
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
               <button className="rounded-lg hover:bg-gray-200 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-gray-200 text-gray-500">Close</button>
-              <button onClick={btnSendToKitchen} className="rounded-lg hover:bg-green-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Send to Kitchen</button>
+              <button onClick={btnSendToKitchen} className="rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Send to Kitchen</button>
             </form>
           </div>
         </div>
@@ -1255,7 +1255,7 @@ export default function POSPage() {
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
               <button className="rounded-lg hover:bg-gray-200 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-gray-200 text-gray-500">Close</button>
-              <button onClick={()=>{btnPayAndSendToKitchen();}} className="rounded-lg hover:bg-green-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Collect Payment & Send to Kitchen</button>
+              <button onClick={()=>{btnPayAndSendToKitchen();}} className="rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Collect Payment & Send to Kitchen</button>
             </form>
           </div>
         </div>
@@ -1282,7 +1282,7 @@ export default function POSPage() {
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
               <button className="rounded-lg hover:bg-gray-200 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-gray-200 text-gray-500">Close</button>
-              <button onClick={btnPrintTokenOnly} className="rounded-lg hover:bg-green-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Print Token</button>
+              <button onClick={btnPrintTokenOnly} className="rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Print Token</button>
             </form>
           </div>
         </div>
