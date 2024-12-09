@@ -2,18 +2,19 @@ import React, { useRef } from "react";
 import Page from "../../components/Page";
 import { IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
 import { iconStroke } from "../../config/config";
-import { addCategory, deleteCategory, updateCategory, useCategories } from "../../controllers/settings.controller";
+import {  addNewTaxGroup,  deleteTaxGroup,  updateTaxGroup,  useTaxGroups } from "../../controllers/settings.controller";
 import toast from "react-hot-toast";
 import { mutate } from "swr";
+import { Link } from "react-router-dom";
 import { AddFab } from "../../components/Fab";
 
-export default function CategoriesPage() {
-  const categoryTitleRef = useRef();
+export default function TaxGroupsPage() {
+  const taxGroupsTitleRef = useRef();
 
-  const categoryIdRef = useRef();
-  const categoryTitleUpdateRef = useRef();
+  const taxGroupIdRef = useRef();
+  const taxGroupTitleUpdateRef = useRef();
 
-  const { APIURL, data: categories, error, isLoading } = useCategories();
+  const { APIURL, data: taxGroups, error, isLoading } = useTaxGroups();
 
   if (isLoading) {
     return <Page className="px-8 py-6">Please wait...</Page>;
@@ -25,19 +26,19 @@ export default function CategoriesPage() {
   }
 
   async function btnAdd() {
-    const title = categoryTitleRef.current.value;
+    const title = taxGroupsTitleRef.current.value;
 
     if(!title) {
-      toast.error("Please provide Category Title!");
+      toast.error("Please provide Tax Group Title!");
       return;
     }
 
     try {
       toast.loading("Please wait...");
-      const res = await addCategory(title);
+      const res = await addNewTaxGroup(title);
 
       if(res.status == 200) {
-        categoryTitleRef.current.value = "";
+        taxGroupsTitleRef.current.value = "";
         await mutate(APIURL);
         toast.dismiss();
         toast.success(res.data.message);
@@ -52,14 +53,14 @@ export default function CategoriesPage() {
   }
 
   const btnShowUpdate = async (id, title) => {
-    categoryIdRef.current.value = id;
-    categoryTitleUpdateRef.current.value = title;
+    taxGroupIdRef.current.value = id;
+    taxGroupTitleUpdateRef.current.value = title;
     document.getElementById('modal-update').showModal();
   };
 
   const btnUpdate = async () => {
-    const id = categoryIdRef.current.value
-    const title = categoryTitleUpdateRef.current.value
+    const id = taxGroupIdRef.current.value
+    const title = taxGroupTitleUpdateRef.current.value
 
     if(!title) {
       toast.error("Please provide title!");
@@ -68,11 +69,11 @@ export default function CategoriesPage() {
 
     try {
       toast.loading("Please wait...");
-      const res = await updateCategory(id, title);
+      const res = await updateTaxGroup(id, title);
 
       if(res.status == 200) {
-        categoryIdRef.current.value = null;
-        categoryTitleUpdateRef.current.value = null;
+        taxGroupIdRef.current.value = null;
+        taxGroupTitleUpdateRef.current.value = null;
 
         await mutate(APIURL);
         toast.dismiss();
@@ -96,7 +97,7 @@ export default function CategoriesPage() {
 
     try {
       toast.loading("Please wait...");
-      const res = await deleteCategory(id);
+      const res = await deleteTaxGroup(id);
 
       if(res.status == 200) {
         await mutate(APIURL);
@@ -115,7 +116,13 @@ export default function CategoriesPage() {
   return (
     <Page className="px-8 py-6">
       <div className="flex items-center gap-6">
-        <h3 className="text-3xl font-light">Categories</h3>
+        <h3 className="text-3xl font-light">Tax Groups</h3>
+        <Link
+          to="../tax-setup"
+          className="w-fit rounded-lg border bg-gray-50 hover:bg-gray-100 transition active:scale-95 hover:shadow-lg text-gray-500 px-3 py-1"
+        >
+          Tax Setup
+        </Link>
       </div>
 
       <div className="mt-8 w-full">
@@ -135,8 +142,8 @@ export default function CategoriesPage() {
             </tr>
           </thead>
           <tbody>
-            {categories.map((category, index) => {
-              const { id, title } = category;
+            {taxGroups.map((taxGroup, index) => {
+              const { id, title } = taxGroup;
 
               return (
                 <tr key={index}>
@@ -169,11 +176,11 @@ export default function CategoriesPage() {
 
       <dialog id="modal-add" className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Add New Category</h3>
+          <h3 className="font-bold text-lg">Add New Group</h3>
           
           <div className="my-4">
-            <label htmlFor="title" className="mb-1 block text-gray-500 text-sm">Category Title</label>
-            <input ref={categoryTitleRef} type="text" name="title" className="text-sm w-full border rounded-lg px-4 py-2 bg-gray-50 outline-restro-border-green-light" placeholder="Enter Category Title..." />
+            <label htmlFor="title" className="mb-1 block text-gray-500 text-sm">Tax Group Title</label>
+            <input ref={taxGroupsTitleRef} type="text" name="title" className="text-sm w-full border rounded-lg px-4 py-2 bg-gray-50 outline-restro-border-green-light" placeholder="Enter Tax Group Title..." />
           </div>
 
           <div className="modal-action">
@@ -188,12 +195,12 @@ export default function CategoriesPage() {
 
       <dialog id="modal-update" className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Update Category</h3>
+          <h3 className="font-bold text-lg">Update Group</h3>
           
           <div className="my-4">
-            <input type="hidden" ref={categoryIdRef} />
-            <label htmlFor="title" className="mb-1 block text-gray-500 text-sm">Category Title</label>
-            <input ref={categoryTitleUpdateRef} type="text" name="title" className="text-sm w-full border rounded-lg px-4 py-2 bg-gray-50 outline-restro-border-green-light" placeholder="Enter Category Title..." />
+            <input type="hidden" ref={taxGroupIdRef} />
+            <label htmlFor="title" className="mb-1 block text-gray-500 text-sm">Group Title</label>
+            <input ref={taxGroupTitleUpdateRef} type="text" name="title" className="text-sm w-full border rounded-lg px-4 py-2 bg-gray-50 outline-restro-border-green-light" placeholder="Enter Tax Group Title..." />
           </div>
 
           <div className="modal-action">
@@ -205,7 +212,7 @@ export default function CategoriesPage() {
           </div>
         </div>
       </dialog>
-      <AddFab onclick={() => document.getElementById("modal-add").showModal()} />
+      <AddFab onclick={() => document.getElementById("modal-add").showModal()}/>
     </Page>
   );
 }

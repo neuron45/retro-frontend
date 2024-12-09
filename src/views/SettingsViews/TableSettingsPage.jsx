@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import { mutate } from "swr";
 import { getTableQRMenuLink } from "../../helpers/QRMenuHelper";
 import QRCode from "qrcode";
+import { AddFab } from "../../components/Fab";
 
 export default function TableSettingsPage() {
 
@@ -194,12 +195,6 @@ export default function TableSettingsPage() {
     <Page className="px-8 py-6">
       <div className="flex items-center gap-6">
         <h3 className="text-3xl font-light">Store Tables</h3>
-        <button
-          onClick={() => document.getElementById("modal-add").showModal()}
-          className="rounded-lg border bg-gray-50 hover:bg-gray-100 transition active:scale-95 hover:shadow-lg text-gray-500 px-2 py-1 flex items-center gap-1"
-        >
-          <IconPlus size={22} stroke={iconStroke} /> New
-        </button>
       </div>
 
       <div className="mt-8 w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -310,6 +305,7 @@ export default function TableSettingsPage() {
 
         </div>
       </dialog>
+      <AddFab onclick={() => document.getElementById("modal-add").showModal()} />
     </Page>
   );
 }

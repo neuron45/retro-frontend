@@ -33,6 +33,7 @@ import { getUserDetailsInLocalStorage } from "../helpers/UserDetails";
 
 export default function OrdersPage() {
   const printReceiptRef = useRef();
+  const paymentTypeRef = useRef();
   const { socket, isSocketConnected } = useContext(SocketContext);
 
   const [state, setState] = useState({
@@ -149,7 +150,6 @@ export default function OrdersPage() {
     } else {
       initSocket();
       socket.on("new_order", (payload) => {
-        console.log(payload);
         // textToSpeech(`New order received, token number: ${payload}`);
         audio.play();
         refreshOrders();
@@ -292,14 +292,20 @@ export default function OrdersPage() {
   };
   const btnPayAndComplete = async () => {
     const isPrintReceipt = printReceiptRef.current.checked || false;
+    const paymentType = paymentTypeRef.current.value;
 
     try {
       toast.loading("Please wait...");
+      if(!paymentType) {
+        toast.error("Please Provide Payment Type");
+        return;
+      }
       const res = await payAndCompleteKitchenOrder(
         state.completeOrderIds,
         state.summaryNetTotal,
         state.summaryTaxTotal,
-        state.summaryTotal
+        state.summaryTotal,
+        paymentType
       );
       toast.dismiss();
       if (res.status == 200) {
@@ -356,6 +362,7 @@ export default function OrdersPage() {
             payableTotal: state.summaryTotal,
             tokenNo: state.completeTokenIds,
             orderId: orderIds,
+            paymentType
           });
 
           const receiptWindow = window.open(
@@ -542,27 +549,33 @@ export default function OrdersPage() {
                           <IconX size={18} stroke={iconStroke} /> Cancel
                         </button>
                       </li>
-                      <li>
-                        <button
-                          className="flex items-center gap-2 bg-transparent border-none shadow-none text-green-500"
-                          onClick={() => {
-                            btnShowCompleteOrderModal(order_ids);
-                          }}
-                        >
-                          <IconCheck size={18} stroke={iconStroke} /> Complete
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="flex items-center gap-2 bg-transparent border-none shadow-none "
-                          onClick={() => {
-                            btnShowPayAndComplete(order_ids, order);
-                          }}
-                        >
-                          <IconCash size={18} stroke={iconStroke} /> Pay &
-                          Complete
-                        </button>
-                      </li>
+                      {
+                        orders[0].payment_status === "paid" && (<li>
+                          <button
+                            className="flex items-center gap-2 bg-transparent border-none shadow-none text-green-500"
+                            onClick={() => {
+                              btnShowCompleteOrderModal(order_ids);
+                            }}
+                          >
+                            <IconCheck size={18} stroke={iconStroke} /> Complete
+                          </button>
+                        </li>)
+                      }
+                      
+                      {
+                        orders[0].payment_status !== "paid" && (<li>
+                          <button
+                            className="flex items-center gap-2 bg-transparent border-none shadow-none "
+                            onClick={() => {
+                              btnShowPayAndComplete(order_ids, order);
+                            }}
+                          >
+                            <IconCash size={18} stroke={iconStroke} /> Pay &
+                            Complete
+                          </button>
+                        </li>)
+                      }
+                      
                     </ul>
                   </div>
                 </div>
@@ -579,6 +592,7 @@ export default function OrdersPage() {
                     payment_status,
                     token_no,
                     items,
+                    paymentType
                   } = o;
 
                   return (
@@ -599,7 +613,7 @@ export default function OrdersPage() {
                           <p className="flex gap-2 items-center text-sm text-gray-500">
                             {" "}
                             <IconCash stroke={iconStroke} size={18} />{" "}
-                            {payment_status}
+                            {payment_status} {paymentType ? `(${paymentType})` : '' }
                           </p>
                         </div>
                       </div>
@@ -871,6 +885,17 @@ export default function OrdersPage() {
               </div>
             </div>
 
+            <div className="my-4 flex items-center divide-x w-full">
+            <select ref={paymentTypeRef} className='mt-3 text-sm text-gray-500 w-full border rounded-lg px-4 py-2 bg-gray-50 outline-restro-border-green-light'>
+              <option value="-1">Select Payment option</option>
+              {
+                paymentTypes.map(paymentType => {
+                  return <option key={paymentType.id} value={paymentType.id}>{paymentType.title}</option>
+                })
+              }
+            </select>
+          </div>
+
             <label
               htmlFor="print_receipt"
               className="mt-4 w-full flex justify-end items-center gap-2 "
@@ -887,12 +912,12 @@ export default function OrdersPage() {
           <div className="modal-action">
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
-              <button className="btn">Dismiss</button>
+              <button className="btn px-8 py-3" >Dismiss</button>
               <button
                 onClick={() => {
                   btnPayAndComplete();
                 }}
-                className="ml-2 btn hover:bg-restro-green-dark bg-restro-green text-white"
+                className="ml-2 btn hover:bg-restro-green-dark bg-restro-green text-white px-24 py-3"
               >
                 Pay & Complete Order
               </button>

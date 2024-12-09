@@ -25,14 +25,14 @@ export function useMenuItem(id) {
   };
 }
 
-export async function addMenuItem(title, price, netPrice, categoryId, taxId) {
+export async function addMenuItem(title, price, netPrice, categoryId, taxGroupId) {
   try {
     const response = await ApiClient.post("/menu-items/add", {
       title,
       price,
       netPrice,
       categoryId,
-      taxId,
+      taxGroupId,
     });
     return response;
   } catch (error) {
@@ -40,14 +40,14 @@ export async function addMenuItem(title, price, netPrice, categoryId, taxId) {
   }
 }
 
-export async function updateMenuItem(id, title, price, netPrice, categoryId, taxId) {
+export async function updateMenuItem(id, title, price, netPrice, categoryId, taxGroupId) {
   try {
     const response = await ApiClient.post(`/menu-items/update/${id}`, {
       title,
       price,
       netPrice,
       categoryId,
-      taxId,
+      taxGroupId,
     });
     return response;
   } catch (error) {

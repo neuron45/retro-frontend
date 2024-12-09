@@ -2,22 +2,27 @@ import React, { useRef } from "react";
 import Page from "../../components/Page";
 import { IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
 import { iconStroke } from "../../config/config";
-import { addNewTax, deleteTax, updateTax, useTaxes } from "../../controllers/settings.controller";
+import { addNewTax, deleteTax, updateTax, useTaxes, useTaxGroups } from "../../controllers/settings.controller";
 import toast from "react-hot-toast";
 import { mutate } from "swr";
+import { Link } from "react-router-dom";
+import { AddFab } from "../../components/Fab";
 
 export default function TaxSetupPage() {
 
   const taxTitleAddRef = useRef();
   const taxRateAddRef = useRef();
   const taxTypeAddRef = useRef();
+  const taxGroupAddRef = useRef();
 
   const taxIdUpdateRef = useRef();
   const taxTitleUpdateRef = useRef();
   const taxRateUpdateRef = useRef();
   const taxTypeUpdateRef = useRef();
+  const taxGroupUpdateRef = useRef();
 
   const { APIURL, data: taxes, error, isLoading } = useTaxes();
+  const { data: taxGroups, error: taxGroupsError, isLoading: isLoadingTaxGroups } = useTaxGroups();
 
   if (isLoading) {
     return <Page className="px-8 py-6">Please wait...</Page>;
@@ -33,6 +38,7 @@ export default function TaxSetupPage() {
     const title = taxTitleAddRef.current.value;
     const rate = taxRateAddRef.current.value;
     const type = taxTypeAddRef.current.value;
+    const groupId = taxGroupAddRef.current.value;
 
     if(!title) {
       toast.error("Provide Title!");
@@ -47,14 +53,20 @@ export default function TaxSetupPage() {
       return;
     }
 
+    if (!groupId) {
+      toast.error("Select Tax Group!");
+      return;
+    }
+
     try {
       toast.loading("Please wait...");
-      const res = await addNewTax(title, rate, type);
+      const res = await addNewTax(title, rate, type, groupId);
 
       if(res.status == 200) {
         taxTitleAddRef.current.value = null;
         taxRateAddRef.current.value = null;
         taxTypeAddRef.current.value = null;
+        taxGroupAddRef.current.value = null;
         await mutate(APIURL);
         toast.dismiss();
         toast.success(res.data.message);
@@ -147,9 +159,12 @@ export default function TaxSetupPage() {
     <Page className="px-8 py-6">
       <div className="flex items-center gap-6">
         <h3 className="text-3xl font-light">Tax Setup</h3>
-        <button onClick={()=>document.getElementById('modal-add').showModal()} className="rounded-lg border bg-gray-50 hover:bg-gray-100 transition active:scale-95 hover:shadow-lg text-gray-500 px-2 py-1 flex items-center gap-1">
-          <IconPlus size={22} stroke={iconStroke} /> New
-        </button>
+        <Link
+          to="tax-groups"
+          className="w-fit rounded-lg border bg-gray-50 hover:bg-gray-100 transition active:scale-95 hover:shadow-lg text-gray-500 px-3 py-1"
+        >
+          Tax Groups
+        </Link>
       </div>
 
 
@@ -160,7 +175,7 @@ export default function TaxSetupPage() {
               <th className="px-3 py-2 bg-gray-100 font-medium text-gray-500 text-start  md:w-20">
                 #
               </th>
-              <th className="px-3 py-2 bg-gray-100 font-medium text-gray-500 text-start  md:w-96">
+              <th className="px-3 py-2 bg-gray-100 font-medium text-gray-500 text-start  md:w-40">
                 Title
               </th>
 
@@ -172,13 +187,17 @@ export default function TaxSetupPage() {
                 Type
               </th>
               <th className="px-3 py-2 bg-gray-100 font-medium text-gray-500 text-start md:w-28">
+                Group
+              </th>
+
+              <th className="px-3 py-2 bg-gray-100 font-medium text-gray-500 text-start md:w-28">
                 Actions
               </th>
             </tr>
           </thead>
           <tbody>
-            {taxes.map((tax, index) => {
-              const { id, title, rate, type } = tax;
+            {(taxes || []).map((tax, index) => {
+              const { id, title, rate, type, taxGroup } = tax;
 
               return (
                 <tr key={index}>
@@ -186,6 +205,7 @@ export default function TaxSetupPage() {
                   <td className="px-3 py-2 text-start">{title}</td>
                   <td className="px-3 py-2 text-start">{rate}%</td>
                   <td className="px-3 py-2 text-start">{type}</td>
+                  <td className="px-3 py-2 text-start">{taxGroup}</td>
                   <td className="px-3 py-2 text-start flex flex-wrap gap-2 items-center">
                     <button
                       onClick={() => {
@@ -235,6 +255,23 @@ export default function TaxSetupPage() {
               </select>
             </div>
           </div>
+          <div className="flex gap-4 w-full my-4">
+
+            <div className="flex-1">
+              <label htmlFor="type" className="mb-1 block text-gray-500 text-sm">Group</label>
+              <select ref={taxGroupAddRef} name="taxGroup" className="text-sm w-full border rounded-lg px-4 py-2 bg-gray-50 outline-restro-border-green-light" placeholder="Select Tax Group" >
+                <option value="" hidden>Select Tax Group</option>
+                {
+                  (taxGroups || []).map((taxGroup) => {
+                    const { id, title } = taxGroup;
+                    return (
+                      <option key={id} value={id}>{title}</option>
+                    )
+                  })
+                }
+              </select>
+            </div>
+          </div>
 
           <div className="modal-action">
             <form method="dialog">
@@ -271,6 +308,23 @@ export default function TaxSetupPage() {
               </select>
             </div>
           </div>
+          <div className="flex gap-4 w-full my-4">
+
+            <div className="flex-1">
+              <label htmlFor="type" className="mb-1 block text-gray-500 text-sm">Group</label>
+              <select ref={taxGroupAddRef} name="taxGroup" className="text-sm w-full border rounded-lg px-4 py-2 bg-gray-50 outline-restro-border-green-light" placeholder="Select Tax Group" >
+                <option value="" hidden>Select Tax Group</option>
+                {
+                  (taxGroups || []).map((taxGroup) => {
+                    const { id, title } = taxGroup;
+                    return (
+                      <option key={id} value={id}>{title}</option>
+                    )
+                  })
+                }
+              </select>
+            </div>
+          </div>
 
           <div className="modal-action">
             <form method="dialog">
@@ -281,7 +335,7 @@ export default function TaxSetupPage() {
           </div>
         </div>
       </dialog>
-
+    <AddFab onclick={()=>document.getElementById('modal-add').showModal()}/>
     </Page>
   )
 }

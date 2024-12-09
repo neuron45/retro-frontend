@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import Page from "../components/Page";
-import { IconPlus, IconNotes, IconArmchair, IconScreenShare, IconSearch, IconDeviceFloppy, IconChefHat, IconCash, IconMinus, IconNote, IconTrash, IconFilter, IconPhoto, IconFilterFilled, IconClipboardList, IconX, IconClearAll, IconPencil, IconCheck, IconCarrot, IconRotate, IconQrcode, IconArmchair2, IconUser } from "@tabler/icons-react";
+import { IconPlus, IconRowRemove, IconNotes, IconArmchair, IconScreenShare, IconSearch, IconDeviceFloppy, IconChefHat, IconCash, IconMinus, IconNote, IconTrash, IconFilter, IconPhoto, IconFilterFilled, IconClipboardList, IconX, IconClearAll, IconPencil, IconCheck, IconCarrot, IconRotate, IconQrcode, IconArmchair2, IconUser } from "@tabler/icons-react";
 import { VITE_BACKEND_SOCKET_IO, iconStroke } from "../config/config";
 import { cancelAllQROrders, cancelQROrder, createOrder, createOrderAndInvoice, getDrafts, getQROrders, getQROrdersCount, initPOS, setDrafts } from "../controllers/pos.controller";
 import { CURRENCIES } from '../config/currencies.config';
@@ -21,6 +21,7 @@ export default function POSPage() {
   const navigate = useNavigate();
 
   const diningOptionRef = useRef();
+  const paymentTypeRef = useRef();
   const tableRef = useRef();
 
   // dialog: notes ref
@@ -79,7 +80,23 @@ export default function POSPage() {
     _initSocket();
   },[]);
 
-  const { categories, menuItems, paymentTypes, printSettings, storeSettings, storeTables, currency, cartItems, searchQuery, selectedCategory, selectedItemId, drafts, customer, customerType, isLoading } = state;
+  const { 
+    categories,
+    menuItems,
+    paymentTypes,
+    printSettings,
+    storeSettings,
+    storeTables,
+    currency,
+    cartItems,
+    searchQuery,
+    selectedCategory,
+    selectedItemId,
+    drafts,
+    customer,
+    customerType,
+    isLoading 
+  } = state;
 
   
 
@@ -477,7 +494,6 @@ export default function POSPage() {
     }
   }
   const btnSelectQROrder = (qrOrder) => {
-    console.log(qrOrder);
     
     if(qrOrder.table_id) {
       tableRef.current.value = qrOrder.table_id;
@@ -602,12 +618,18 @@ export default function POSPage() {
   const btnPayAndSendToKitchen = async () => {
     try {
       const deliveryType = diningOptionRef.current.value;
+      const paymentTypeId = paymentTypeRef.current.value;
       const tableId = tableRef.current.value;
       const customerType = state.customerType;
       const customer = state.customer;
 
+      if(!paymentTypeId) {
+        toast.error("Please Provide Payment Type");
+        return;
+      }
+
       toast.loading("Please wait...");
-      const res = await createOrderAndInvoice(cartItems, deliveryType, customerType, customer, tableId, state.itemsTotal, state.taxTotal, state.payableTotal, state.selectedQrOrderItem);
+      const res = await createOrderAndInvoice(cartItems, deliveryType, customerType, customer, tableId, state.itemsTotal, state.taxTotal, state.payableTotal, state.selectedQrOrderItem, paymentTypeId);
       toast.dismiss();
       if(res.status == 200) {
         const data = res.data;
@@ -623,7 +645,8 @@ export default function POSPage() {
           taxTotal: state.taxTotal,
           payableTotal: state.payableTotal,
           tokenNo: data.tokenNo,
-          orderId: data.orderId
+          orderId: data.orderId,
+          paymentTypeId
         });
 
         sendNewOrderEvent(data.tokenNo, data.orderId);
@@ -762,8 +785,6 @@ export default function POSPage() {
 
   const setCustomer = (customer) => {
 
-    console.log("customer" , customer);
-
     if(customer) {
       setState({
         ...state,
@@ -797,8 +818,8 @@ export default function POSPage() {
       <div className="flex md:items-center justify-between flex-col md:flex-row gap-2">
         <h3>POS - Point of Sale</h3>
         <div className='flex flex-wrap items-center gap-4'>
-          <button onClick={btnInitNewOrder} className="text-sm rounded-lg border bg-gray-50 hover:bg-gray-100 transition active:scale-95 hover:shadow-lg text-gray-500 px-2 py-1 flex items-center gap-1">
-            <IconPlus size={18} stroke={iconStroke}  /> New
+          <button onClick={btnInitNewOrder} className="text-sm rounded-lg border bg-red-50 hover:bg-gray-100 transition active:scale-95 hover:shadow-lg text-gray-500 px-2 py-1 flex items-center gap-1">
+            <IconRowRemove size={18} stroke={iconStroke}  /> Clear
           </button>
 
           {/* QR Menu Orders */}
@@ -986,7 +1007,7 @@ export default function POSPage() {
                 <IconDeviceFloppy size={18} stroke={iconStroke}  /> Draft
               </button>
 
-              <button onClick={btnShowSendToKitchenModal} className="text-sm rounded-lg border bg-gray-50 hover:bg-gray-100 transition active:scale-95 hover:shadow-lg text-gray-500 px-2 py-1 flex-1 flex justify-center items-center gap-1">
+              <button onClick={btnShowSendToKitchenModal} className="text-sm rounded-lg border bg-red-50 hover:bg-gray-100 transition active:scale-95 hover:shadow-lg text-gray-500 px-2 py-1 flex-1 flex justify-center items-center gap-1">
                 <div><IconChefHat size={18} stroke={iconStroke}  /></div> <p>Send to Kitchen</p>
               </button>
             </div>
@@ -1223,8 +1244,8 @@ export default function POSPage() {
           <div className="modal-action">
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
-              <button className="rounded-lg hover:bg-gray-200 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-gray-200 text-gray-500">Close</button>
-              <button onClick={btnSendToKitchen} className="rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Send to Kitchen</button>
+              <button className="rounded-lg hover:bg-gray-200 transition active:scale-95 hover:shadow-lg px-12 py-3 bg-gray-200 text-gray-500">Close</button>
+              <button onClick={btnSendToKitchen} className="rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-24 py-3 bg-restro-green text-white ml-3">Send to Kitchen</button>
             </form>
           </div>
         </div>
@@ -1250,12 +1271,25 @@ export default function POSPage() {
               <p className="text-lg font-bold text-restro-green">{currency}{state.payableTotal.toFixed(2)}</p>
             </div>
           </div>
-
+          <div className="my-4 flex items-center divide-x w-full">
+            <select ref={paymentTypeRef} className='mt-3 text-sm text-gray-500 w-full border rounded-lg px-4 py-2 bg-gray-50 outline-restro-border-green-light'>
+              <option value="">Select Payment option</option>
+              {
+                paymentTypes.map(paymentType => {
+                  return <option key={paymentType.id} value={paymentType.id}>{paymentType.title}</option>
+                })
+              }
+            </select>
+          </div>
           <div className="modal-action">
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
-              <button className="rounded-lg hover:bg-gray-200 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-gray-200 text-gray-500">Close</button>
-              <button onClick={()=>{btnPayAndSendToKitchen();}} className="rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-4 py-3 bg-restro-green text-white ml-3">Collect Payment & Send to Kitchen</button>
+              <button className="rounded-lg hover:bg-gray-200 transition active:scale-95 hover:shadow-lg px-8 py-3 bg-gray-200 text-gray-500">Close</button>
+              <button 
+                onClick={()=>{btnPayAndSendToKitchen();}} 
+                className="rounded-lg hover:bg-red-800 transition active:scale-95 hover:shadow-lg px-12 py-3 bg-restro-green text-white ml-3">
+                  Collect Payment & Send to Kitchen
+              </button>
             </form>
           </div>
         </div>

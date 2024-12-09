@@ -15,6 +15,7 @@ import { toast } from "react-hot-toast";
 import { mutate } from "swr";
 import { addNewUser, deleteUser, resetUserPassword, updateUser, useUsers } from "../controllers/users.controller";
 import { validateEmail } from "../utils/emailValidator";
+import { AddFab } from "../components/Fab";
 
 
 export default function UsersPage() {
@@ -250,12 +251,7 @@ export default function UsersPage() {
     <Page>
       <div className="flex items-center gap-6">
         <h3 className="text-3xl font-light">Users</h3>
-        <button
-          onClick={() => document.getElementById("modal-add").showModal()}
-          className="rounded-lg border bg-gray-50 hover:bg-gray-100 transition active:scale-95 hover:shadow-lg text-gray-500 px-2 py-1 flex items-center gap-1"
-        >
-          <IconPlus size={22} stroke={iconStroke} /> New
-        </button>
+        
       </div>
 
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
@@ -750,6 +746,7 @@ export default function UsersPage() {
         </div>
       </dialog>
       {/* modal change password */}
+      <AddFab onclick={() => document.getElementById("modal-add").showModal()} />
     </Page>
   );
 }

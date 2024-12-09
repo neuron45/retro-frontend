@@ -80,17 +80,22 @@ export async function getCompleteOrderPaymentSummary(orderIds) {
  * @param {Number} subTotal 
  * @param {Number} taxTotal 
  * @param {Number} total 
+ * @param {Number} paymentTypeId 
  *  */  
 export async function payAndCompleteKitchenOrder(
     orderIds,
     subTotal,
     taxTotal,
-    total
+    total,
+    paymentTypeId
 ) {
     try {
         const response = await ApiClient.post(`/orders/complete-and-pay-order`, {
             orderIds,
-            subTotal, taxTotal, total
+            subTotal,
+            taxTotal,
+            total,
+            paymentTypeId
         });
         return response;
     } catch (error) {

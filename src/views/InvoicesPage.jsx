@@ -145,8 +145,6 @@ export default function InvoicesPage() {
       toast.dismiss();
 
       if(res.status == 200) {
-        console.log(res.data);
-        console.log(orderIdsArr);
         const {
           subtotal,
           taxTotal,
@@ -202,8 +200,6 @@ export default function InvoicesPage() {
       toast.dismiss();
 
       if(res.status == 200) {
-        console.log(res.data);
-        console.log(orderIdsArr);
         const {
           subtotal,
           taxTotal,
@@ -389,6 +385,7 @@ export default function InvoicesPage() {
                 <th>Tax</th>
                 <th>Total</th>
                 <th>Delivery Type</th>
+                <th>Payment Type</th>
                 <th>Customer</th>
                 <th>Table</th>
                 <th>Action</th>
@@ -411,6 +408,7 @@ export default function InvoicesPage() {
                   name,
                   email,
                   orders,
+                  paymentType
                 } = invoice;
 
                 const orderIdsArr = orders.map(o=>o.order_id);
@@ -427,6 +425,7 @@ export default function InvoicesPage() {
                   <td>{state.currency}{tax_total}</td>
                   <td className="font-bold">{state.currency}{total}</td>
                   <td>{delivery_type?delivery_type:"N/A"}</td>
+                  <td>{paymentType}</td>
                   <td>{customer_id ?<b>{name}-({customer_id})</b>:"WALKIN"}</td>
                   <td>{table_id ? <b>{table_title}-{floor}</b>:"N/A"}</td>
 

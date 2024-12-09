@@ -2,19 +2,20 @@ import React, { useRef } from "react";
 import Page from "../../components/Page";
 import { IconCarrot, IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
 import { iconStroke } from "../../config/config";
-import { useCategories, useTaxes } from "../../controllers/settings.controller";
+import { useCategories, useTaxGroups } from "../../controllers/settings.controller";
 import toast from "react-hot-toast";
 import { mutate } from "swr";
 import { Link, useNavigate } from "react-router-dom";
 import { addMenuItem, deleteMenuItem, useMenuItems } from "../../controllers/menu_item.controller";
 import { getImageURL } from "../../helpers/ImageHelper";
+import { AddFab } from "../../components/Fab";
 
 export default function MenuItemsSettingsPage() {
   const navigate = useNavigate();
   const titleRef = useRef();
   const priceRef = useRef();
   const netPriceRef = useRef();
-  const taxIdRef = useRef();
+  const taxGroupIdRef = useRef();
   const categoryIdRef = useRef();
 
   const {
@@ -24,7 +25,7 @@ export default function MenuItemsSettingsPage() {
     isLoading: isLoadingCategories,
   } = useCategories();
 
-  const { APIURL: APIURLTaxes, data:taxes, error:errorTaxes, isLoading:isLoadingTaxes } = useTaxes();
+  const { APIURL: APIURLTaxGroups, data:taxGroups, error:errorTaxGroups, isLoading:isLoadingTaxGroups } = useTaxGroups();
 
   const {APIURL,data: menuItems,error,isLoading} = useMenuItems();
 
@@ -33,14 +34,6 @@ export default function MenuItemsSettingsPage() {
   }
 
   if (errorCategories) {
-    return <Page>Error loading details! Please Try Later!</Page>;
-  }
-
-  if(isLoadingTaxes) {
-    return <Page>Please wait...</Page>
-  }
-
-  if(errorTaxes) {
     return <Page>Error loading details! Please Try Later!</Page>;
   }
 
@@ -57,7 +50,7 @@ export default function MenuItemsSettingsPage() {
     const price = priceRef.current.value;
     const netPrice = netPriceRef.current.value || null;
     const categoryId = categoryIdRef.current.value || null;
-    const taxId = taxIdRef.current.value || null;
+    const taxGroupId = taxGroupIdRef.current.value || null;
 
     if(!title) {
       toast.error("Please enter title!");
@@ -71,20 +64,21 @@ export default function MenuItemsSettingsPage() {
 
     try {
       toast.loading("Please wait...");
-      const res = await addMenuItem(title, price, netPrice, categoryId, taxId);
+      const res = await addMenuItem(title, price, netPrice, categoryId, taxGroupId);
 
       if(res.status == 200) {
         titleRef.current.value = null;
         priceRef.current.value = null;
         netPriceRef.current.value = null;
         categoryIdRef.current.value = null;
-        taxIdRef.current.value = null;
+        taxGroupIdRef.current.value = null;
 
         await mutate(APIURL);
         toast.dismiss();
         toast.success(res.data.message);
       }
     } catch (error) {
+      console.log(error);
       const message = error.response.data.message || "Something went wrong!";
       console.error(error);
       toast.dismiss();
@@ -125,12 +119,6 @@ export default function MenuItemsSettingsPage() {
     <Page className="px-8 py-6">
       <div className="flex md:items-center flex-col md:flex-row gap-2">
         <h3 className="text-3xl font-light mr-6">Menu</h3>
-        <button
-          onClick={() => document.getElementById("modal-add").showModal()}
-          className="rounded-lg border bg-gray-50 hover:bg-gray-100 transition active:scale-95 hover:shadow-lg text-gray-500 px-2 py-1 flex items-center gap-1 mr-4 w-fit"
-        >
-          <IconPlus size={22} stroke={iconStroke} /> New
-        </button>
         <Link
           to="categories"
           className="w-fit rounded-lg border bg-gray-50 hover:bg-gray-100 transition active:scale-95 hover:shadow-lg text-gray-500 px-3 py-1"
@@ -265,18 +253,18 @@ export default function MenuItemsSettingsPage() {
                 htmlFor="tax"
                 className="mb-1 block text-gray-500 text-sm"
               >
-                Tax
+                Tax Group
               </label>
               <select
-                ref={taxIdRef}
-                name="tax"
+                ref={taxGroupIdRef}
+                name="taxGroupId"
                 className="text-sm w-full border rounded-lg px-4 py-2 bg-gray-50 outline-restro-border-green-light"
-                placeholder="Select Tax"
+                placeholder="Select Tax Group"
               >
                 <option value="">None</option>
                 {
-                  taxes.map((tax, index)=>{
-                    return <option value={tax.id} key={tax.id}>{tax.title} - {tax.rate}% ({tax.type})</option>
+                  taxGroups.map((taxGroup)=>{
+                    return <option value={taxGroup.id} key={taxGroup.id}>{taxGroup.title}</option>
                   })
                 }
               </select>
@@ -302,6 +290,7 @@ export default function MenuItemsSettingsPage() {
         </div>
       </dialog>
       {/* add dialog */}
+      <AddFab onclick={() => document.getElementById("modal-add").showModal()} />
     </Page>
   );
 }

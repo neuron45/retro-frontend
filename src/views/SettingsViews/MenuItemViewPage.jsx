@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import Page from "../../components/Page";
 import { Link, useParams } from "react-router-dom";
 import { addMenuItemAddon, addMenuItemVariant, deleteMenuItemAddon, deleteMenuItemVariant, removeMenuItemPhoto, updateMenuItem, updateMenuItemAddon, updateMenuItemVariant, uploadMenuItemPhoto, useMenuItem } from "../../controllers/menu_item.controller";
-import { useCategories, useTaxes } from "../../controllers/settings.controller";
+import { useCategories, useTaxGroups } from "../../controllers/settings.controller";
 import toast from "react-hot-toast";
 import { mutate } from "swr";
 import { IconCarrot, IconChevronDown, IconPencil, IconTrash, IconUpload } from "@tabler/icons-react";
@@ -17,7 +17,7 @@ export default function MenuItemViewPage() {
   const titleRef = useRef();
   const priceRef = useRef();
   const netPriceRef = useRef();
-  const taxIdRef = useRef();
+  const taxGroupIdRef = useRef();
   const categoryIdRef = useRef();
 
   const variantTitleRef = useRef();
@@ -41,12 +41,8 @@ export default function MenuItemViewPage() {
     isLoading: isLoadingCategories,
   } = useCategories();
 
-  const {
-    APIURL: APIURLTaxes,
-    data: taxes,
-    error: errorTaxes,
-    isLoading: isLoadingTaxes,
-  } = useTaxes();
+  const { APIURL: APIURLTaxGroups, data:taxGroups, error:errorTaxGroups, isLoading:isLoadingTaxGroups } = useTaxGroups();
+
 
   const { APIURL, data: menuItem, error, isLoading } = useMenuItem(itemId);
 
@@ -58,11 +54,11 @@ export default function MenuItemViewPage() {
     return <Page>Error loading details! Please Try Later!</Page>;
   }
 
-  if (isLoadingTaxes) {
+  if (isLoadingTaxGroups) {
     return <Page>Please wait...</Page>;
   }
 
-  if (errorTaxes) {
+  if (errorTaxGroups) {
     return <Page>Error loading details! Please Try Later!</Page>;
   }
 
@@ -79,15 +75,13 @@ export default function MenuItemViewPage() {
     title,
     category_id,
     category_title,
-    tax_id,
-    tax_title,
-    tax_rate,
-    tax_type,
     price,
     net_price,
     addons,
     variants,
-    image
+    image,
+    tax_group_id,
+    tax_group_title
   } = menuItem;
   const imageURL = image ? getImageURL(image) : null;
 
@@ -97,7 +91,7 @@ export default function MenuItemViewPage() {
     const price = priceRef.current.value;
     const netPrice = netPriceRef.current.value || null;
     const categoryId = categoryIdRef.current.value || null;
-    const taxId = taxIdRef.current.value || null;
+    const taxGroupId = taxGroupIdRef.current.value || null;
 
     if(!title) {
       toast.error("Please enter title!");
@@ -111,7 +105,7 @@ export default function MenuItemViewPage() {
 
     try {
       toast.loading("Please wait...");
-      const res = await updateMenuItem(id, title, price, netPrice, categoryId, taxId);
+      const res = await updateMenuItem(id, title, price, netPrice, categoryId, taxGroupId);
 
       if(res.status == 200) {
         await mutate(APIURL);
@@ -441,9 +435,9 @@ export default function MenuItemViewPage() {
           {category_id && (
             <p className="text-sm text-gray-500">Category: {category_title}</p>
           )}
-          {tax_id && (
+          {tax_group_id && (
             <p className="text-sm text-gray-500">
-              Tax: {tax_title} - {tax_rate}% ({tax_type})
+              Tax Group: {tax_group_title}
             </p>
           )}
 
@@ -525,21 +519,21 @@ export default function MenuItemViewPage() {
               </select>
             </div>
             <div className="flex-1">
-              <label htmlFor="tax" className="mb-1 block text-gray-500 text-sm">
-                Tax
+              <label htmlFor="tax_group_id" className="mb-1 block text-gray-500 text-sm">
+                Tax Group
               </label>
               <select
-                ref={taxIdRef}
-                name="tax"
-                defaultValue={tax_id}
+                ref={taxGroupIdRef}
+                name="tax_group_id"
+                defaultValue={tax_group_id}
                 className="text-sm w-full border rounded-lg px-4 py-2 bg-gray-50 outline-restro-border-green-light"
-                placeholder="Select Tax"
+                placeholder="Select Tax Group"
               >
-                <option value="">None</option>
-                {taxes.map((tax, index) => {
+                <option value="-1">None</option>
+                {taxGroups.map((taxGroup) => {
                   return (
-                    <option value={tax.id} key={tax.id}>
-                      {tax.title} - {tax.rate}% ({tax.type})
+                    <option value={taxGroup.id} key={taxGroup.id}>
+                      {taxGroup.title}
                     </option>
                   );
                 })}

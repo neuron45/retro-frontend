@@ -52,6 +52,7 @@ import SuperAdminTenantSubscriptionHistoryPage from "./views/SuperAdmin/SuperAdm
 import CartPage from "./views/CartPage";
 import OrderSuccessPage from "./views/OrderSuccessPage";
 import OrderFailedPage from "./views/OrderFailedPage";
+import TaxGroupsPage from "./views/SettingsViews/TaxGroupsPage";
 
 export default function App() {
   const [isNavbarCollapsed, setIsNavbarCollapsed] = useState(
@@ -211,6 +212,10 @@ export default function App() {
                 element={<CategoriesPage />}
               />
               <Route path="tax-setup" element={<TaxSetupPage />} />
+              <Route
+                path="tax-setup/tax-groups"
+                element={<TaxGroupsPage />}
+              />
               <Route path="payment-types" element={<PaymentTypesPage />} />
 
             </Route>

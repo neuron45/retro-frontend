@@ -22,11 +22,19 @@ export async function createOrder(cart, deliveryType, customerType, customerId, 
   }
 }
 
-export async function createOrderAndInvoice(cart, deliveryType, customerType, customerId, tableId, netTotal, taxTotal, total, selectedQrOrderItem) {
+export async function createOrderAndInvoice(cart, deliveryType, customerType, customerId, tableId, netTotal, taxTotal, total, selectedQrOrderItem, paymentTypeId) {
   try {
     const response = await ApiClient.post("/pos/create-order-and-invoice", {
-      cart, deliveryType, customerType, customerId, tableId,
-      netTotal, taxTotal, total, selectedQrOrderItem
+      cart,
+      deliveryType,
+      customerType,
+      customerId,
+      tableId,
+      netTotal,
+      taxTotal,
+      total,
+      selectedQrOrderItem,
+      paymentTypeId
     });
     return response;
   } catch (error) {

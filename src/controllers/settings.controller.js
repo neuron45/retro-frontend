@@ -115,11 +115,19 @@ export function useTaxes() {
   };
 }
 
-export async function addNewTax(title, rate, type) {
+/***
+ * @param {string} title 
+ * @param {number} rate 
+ * @param {string} type 
+ * @param {number} taxGroupId 
+ */
+export async function addNewTax(title, rate, type, taxGroupId) {
   try {
     const response = await ApiClient.post("/settings/taxes/add", {
       title,
-      rate, type
+      rate, 
+      type,
+      tax_group_id: taxGroupId
     })
     return response;
   } catch (error) {
@@ -147,6 +155,50 @@ export async function updateTax(id, title, rate, type) {
     throw error;
   }
 };
+
+export function useTaxGroups() {
+  const APIURL = `/settings/tax-groups`;
+  const { data, error, isLoading } = useSWR(APIURL, fetcher);
+  return {
+    data,
+    error,
+    isLoading,
+    APIURL,
+  };
+}
+
+
+export async function addNewTaxGroup(title) {
+  try {
+    const response = await ApiClient.post("/settings/tax-groups/add", {
+      title
+    })
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export async function deleteTaxGroup(id) {
+  try {
+    const response = await ApiClient.delete(`/settings/tax-groups/${id}`)
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export async function updateTaxGroup(id, title) {
+  try {
+    const response = await ApiClient.post(`/settings/tax-groups/${id}/update`, {
+      title
+    })
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 export function useStoreTables() {
   const APIURL = `/settings/store-tables`;

@@ -52,7 +52,6 @@ export default function KitchenPage() {
     const audio = new Audio("/new_order_sound.mp3");
     if(isSocketConnected) {
       socket.on('new_order', (payload)=>{
-        console.log(payload);
         // textToSpeech(`New order received, token number: ${payload}`)
         audio.play();
         btnRefresh();
@@ -65,7 +64,6 @@ export default function KitchenPage() {
     } else {
       initSocket();
       socket.on('new_order', (payload)=>{
-        console.log(payload);
         // textToSpeech(`New order received, token number: ${payload}`)
         audio.play();
         btnRefresh();

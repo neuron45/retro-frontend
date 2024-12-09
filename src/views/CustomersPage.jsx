@@ -23,6 +23,7 @@ import { getUserDetailsInLocalStorage } from "../helpers/UserDetails";
 import { SCOPES } from "../config/scopes";
 import { validateEmail } from "../utils/emailValidator";
 import { validatePhone } from "../utils/phoneValidator";
+import { AddFab } from "../components/Fab";
 
 export default function CustomersPage() {
   const { role, scope } = getUserDetailsInLocalStorage();
@@ -219,14 +220,6 @@ export default function CustomersPage() {
       <div className="flex flex-wrap gap-4 flex-col md:flex-row items-center justify-between">
         <div className="flex gap-6">
           <h3 className="text-2xl">Customers</h3>
-          {isManageAllowed && <button
-            onClick={() =>
-              document.getElementById("modal-add-customer").showModal()
-            }
-            className="rounded-lg border bg-gray-50 hover:bg-gray-100 transition active:scale-95 hover:shadow-lg text-gray-500 px-2 py-1 flex items-center gap-1"
-          >
-            <IconPlus size={22} stroke={iconStroke} /> New
-          </button>}
         </div>
 
         <div className="flex gap-2">
@@ -441,6 +434,7 @@ export default function CustomersPage() {
       </div>
     </dialog>
       {/* update dialog */}
+      {isManageAllowed && <AddFab onclick={() => document.getElementById("modal-add-customer").showModal()}/>}
     </Page>
   );
 }
