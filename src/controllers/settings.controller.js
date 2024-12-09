@@ -144,11 +144,13 @@ export async function deleteTax(id) {
   }
 };
 
-export async function updateTax(id, title, rate, type) {
+export async function updateTax(id, title, rate, type, taxGroupId) {
   try {
     const response = await ApiClient.post(`/settings/taxes/${id}/update`, {
       title,
-      rate, type
+      rate,
+      type,
+      tax_group_id: taxGroupId
     })
     return response;
   } catch (error) {

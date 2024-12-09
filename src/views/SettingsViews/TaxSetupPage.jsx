@@ -118,6 +118,7 @@ export default function TaxSetupPage() {
     const title = taxTitleUpdateRef.current.value
     const rate = taxRateUpdateRef.current.value 
     const type = taxTypeUpdateRef.current.value 
+    const taxGroupId = taxGroupUpdateRef.current.value
 
     if(!title) {
       toast.error("Please provide title!");
@@ -134,13 +135,14 @@ export default function TaxSetupPage() {
 
     try {
       toast.loading("Please wait...");
-      const res = await updateTax(id, title, rate, type);
+      const res = await updateTax(id, title, rate, type, taxGroupId);
 
       if(res.status == 200) {
         taxIdUpdateRef.current.value = null;
         taxTypeUpdateRef.current.value = null;
         taxRateUpdateRef.current.value = null;
         taxTitleUpdateRef.current.value = null;
+        taxGroupUpdateRef.current.value = null;
 
         await mutate(APIURL);
         toast.dismiss();
@@ -311,9 +313,9 @@ export default function TaxSetupPage() {
           <div className="flex gap-4 w-full my-4">
 
             <div className="flex-1">
-              <label htmlFor="type" className="mb-1 block text-gray-500 text-sm">Group</label>
-              <select ref={taxGroupAddRef} name="taxGroup" className="text-sm w-full border rounded-lg px-4 py-2 bg-gray-50 outline-restro-border-green-light" placeholder="Select Tax Group" >
-                <option value="" hidden>Select Tax Group</option>
+              <label htmlFor="type" className="mb-1 block text-gray-500 text-sm">Tax Group</label>
+              <select ref={taxGroupUpdateRef} name="taxGroupId" className="text-sm w-full border rounded-lg px-4 py-2 bg-gray-50 outline-restro-border-green-light" placeholder="Select Tax Group" >
+                <option value="-1" hidden>Select Tax Group</option>
                 {
                   (taxGroups || []).map((taxGroup) => {
                     const { id, title } = taxGroup;
