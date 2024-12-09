@@ -186,7 +186,6 @@ export default function PaymentTypesPage() {
                     <label className="relative flex items-center cursor-pointer no-drag">
                       <input
                         onChange={(e) => toggle(id, e.target.checked)}
-                        defaultChecked={is_active}
                         checked={is_active}
                         type="checkbox"
                         className="sr-only peer"
