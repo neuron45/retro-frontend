@@ -12,7 +12,7 @@ export default defineConfig({
         name: "ProDiner",
         short_name: "ProDiner",
         description: "Manage Your Restaurant, Cafe, Hotel, Bar, Food Truck, Stall, any food store.",
-        theme_color: "#FF4D4D",
+        theme_color: "#fff0f0",
         icons: [
           {
             src: "/logo_192.png",
