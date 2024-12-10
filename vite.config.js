@@ -9,10 +9,10 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
-        name: "RestroPro",
-        short_name: "RestroPro",
+        name: "ProDiner",
+        short_name: "ProDiner",
         description: "Manage Your Restaurant, Cafe, Hotel, Bar, Food Truck, Stall, any food store.",
-        theme_color: "#ECF1EB",
+        theme_color: "#FF4D4D",
         icons: [
           {
             src: "/logo_192.png",
