@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { addMenuItem, deleteMenuItem, useMenuItems } from "../../controllers/menu_item.controller";
 import { getImageURL } from "../../helpers/ImageHelper";
 import { AddFab } from "../../components/Fab";
+import { useInventoryItems } from "../../controllers/inventory.controller";
 
 export default function MenuItemsSettingsPage() {
   const navigate = useNavigate();
@@ -19,15 +20,14 @@ export default function MenuItemsSettingsPage() {
   const categoryIdRef = useRef();
 
   const {
-    APIURL: APIURLCategories,
     data: categories,
     error: errorCategories,
     isLoading: isLoadingCategories,
   } = useCategories();
 
-  const { APIURL: APIURLTaxGroups, data:taxGroups, error:errorTaxGroups, isLoading:isLoadingTaxGroups } = useTaxGroups();
-
-  const {APIURL,data: menuItems,error,isLoading} = useMenuItems();
+  const { data:taxGroups, isLoading:isLoadingTaxGroups } = useTaxGroups();
+  const {APIURL, data: menuItems,error,isLoading} = useMenuItems();
+  const {data: inventoryItems} = useInventoryItems(false);
 
   if (isLoadingCategories) {
     return <Page>Please wait...</Page>;

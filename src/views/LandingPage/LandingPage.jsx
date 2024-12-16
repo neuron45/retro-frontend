@@ -49,9 +49,9 @@ export default function LadingPage() {
         </div>
       </div>
       <img
-        src="/assets/hero.webp"
+        src="/assets/hero.png"
         alt="pro diner image"
-        className="w-full block"
+        className="w-4/5 mx-auto mt-[100px] border-[#d14026] border-[10px] rounded-[30px]"
       />
       {/* hero */}
 
@@ -64,7 +64,7 @@ export default function LadingPage() {
         className="w-full container mx-auto grid grid-cols-1 lg:grid-cols-3 my-20 gap-10 px-6 lg:px-0"
       >
         <div className="rounded-2xl px-8 py-6 border flex flex-col items-center justify-center">
-          <div className="w-12 h-12 flex items-center justify-center rounded-full text-restro-green bg-green-100">
+          <div className="w-12 h-12 flex items-center justify-center rounded-full text-restro-green bg-red-100">
             <IconLayout />
           </div>
           <h3 className="mt-4 font-bold text-2xl text-center">Minimal UI</h3>
@@ -76,7 +76,7 @@ export default function LadingPage() {
         </div>
 
         <div className="rounded-2xl px-8 py-6 border flex flex-col items-center justify-center">
-          <div className="w-12 h-12 flex items-center justify-center rounded-full text-restro-green bg-green-100">
+          <div className="w-12 h-12 flex items-center justify-center rounded-full text-restro-green bg-red-100">
             <IconDeviceIpadHorizontal />
           </div>
           <h3 className="mt-4 font-bold text-2xl text-center">POS</h3>
@@ -88,7 +88,7 @@ export default function LadingPage() {
         </div>
 
         <div className="rounded-2xl px-8 py-6 border flex flex-col items-center justify-center">
-          <div className="w-12 h-12 flex items-center justify-center rounded-full text-restro-green bg-green-100">
+          <div className="w-12 h-12 flex items-center justify-center rounded-full text-restro-green bg-red-100">
             <IconChefHat />
           </div>
           <h3 className="mt-4 font-bold text-2xl text-center">Live Updates</h3>
@@ -110,7 +110,7 @@ export default function LadingPage() {
         className="w-full container mx-auto grid grid-cols-1 my-20 gap-10 place-items-center px-6 lg:px-0"
       >
         <div className="rounded-2xl px-8 py-6 border flex flex-col w-full lg:w-96">
-          <h3 className="text-4xl text-green-700 font-bold text-center">{subscriptionPrice}</h3>
+          <h3 className="text-4xl text-red-700 font-bold text-center">{subscriptionPrice}</h3>
           <h3 className=" font-bold text-2xl text-center">per month</h3>
           <ul className="text-gray-700 mt-6 flex flex-col gap-2 text-start">
             <li>✅ Unlimited Orders</li>
@@ -125,7 +125,7 @@ export default function LadingPage() {
       {/* contact */}
       <div id="contact" className="container mx-auto my-40 px-6 lg:px-0">
         <div
-          className="lg:h-40 px-10 py-6 flex gap-4 flex-col md:flex-row lg:items-center rounded-3xl bg-restro-green-dark text-restro-green shadow-2xl shadow-green-700/40"
+          className="lg:h-40 px-10 py-6 flex gap-4 flex-col md:flex-row lg:items-center rounded-3xl bg-restro-green-dark text-restro-green shadow-2xl shadow-red-700/40"
         >
           <h3 className="flex-1 font-bold text-4xl text-white">
             Have any queries?

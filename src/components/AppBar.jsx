@@ -1,10 +1,8 @@
 import {
-  IconArmchair,
   IconArmchair2,
   IconBook,
   IconChartArea,
   IconChefHat,
-  IconChevronDown,
   IconChevronRight,
   IconCommand,
   IconDeviceTablet,
@@ -22,6 +20,7 @@ import {
   IconUser,
   IconUsersGroup,
   IconX,
+
 } from "@tabler/icons-react";
 import { Fragment, useEffect, useState } from "react";
 import { iconStroke } from "../config/config";
@@ -125,6 +124,13 @@ export default function AppBar() {
       icon: <IconFileInvoice stroke={iconStroke} />,
       link: "/dashboard/invoices",
       scopes: [SCOPES.INVOICES]
+    },
+    {
+      title: "Inventory",
+      description: "",
+      icon: <IconFileInvoice stroke={iconStroke} />,
+      link: "/dashboard/inventory",
+      scopes: [SCOPES.INVENTORY]
     },
     {
       title: "Users",

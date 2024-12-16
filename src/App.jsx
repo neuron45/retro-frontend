@@ -53,6 +53,7 @@ import CartPage from "./views/CartPage";
 import OrderSuccessPage from "./views/OrderSuccessPage";
 import OrderFailedPage from "./views/OrderFailedPage";
 import TaxGroupsPage from "./views/SettingsViews/TaxGroupsPage";
+import InventoryItemsPage from "./views/InventoryItemsPage";
 
 export default function App() {
   const [isNavbarCollapsed, setIsNavbarCollapsed] = useState(
@@ -177,6 +178,14 @@ export default function App() {
               element={
                 <ScopeProtectedRoute scopes={[SCOPES.INVOICES]}>
                   <InvoicesPage />
+                </ScopeProtectedRoute>
+              }
+            />
+            <Route
+              path="inventory"
+              element={
+                <ScopeProtectedRoute scopes={[SCOPES.INVENTORY]}>
+                  <InventoryItemsPage />
                 </ScopeProtectedRoute>
               }
             />

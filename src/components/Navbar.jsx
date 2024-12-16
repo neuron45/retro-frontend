@@ -85,8 +85,13 @@ export default function Navbar() {
       icon: <IconFileInvoice stroke={iconStroke} />,
       path: "/dashboard/invoices",
       scopes: [SCOPES.INVOICES]
+    }, {
+      type: "link",
+      text: "Inventory",
+      icon: <IconFileInvoice stroke={iconStroke} />,
+      path: "/dashboard/inventory",
+      scopes: [SCOPES.INVOICES]
     },
-
     {
       type: "text",
       text: "Back Office",
@@ -233,7 +238,7 @@ export default function Navbar() {
 
       <button
         onClick={btnToggleNavbar}
-        className="w-9 h-9 hidden md:flex items-center justify-center rounded-full border transition bg-gray-100 hover:bg-gray-200 text-gray-500 fixed bottom-4 left-[17.5rem] -translate-x-1/2"
+        className="w-9 h-9 hidden md:flex items-center justify-center rounded-full border transition bg-gray-100 hover:bg-red-100 text-gray-500 fixed bottom-4 left-[17.5rem] -translate-x-1/2"
       >
         <IconChevronLeft stroke={iconStroke} size={18} />
       </button>

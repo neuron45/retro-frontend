@@ -6,6 +6,7 @@ import { addCategory, deleteCategory, updateCategory, useCategories } from "../.
 import toast from "react-hot-toast";
 import { mutate } from "swr";
 import { AddFab } from "../../components/Fab";
+import { Link } from "react-router-dom";
 
 export default function CategoriesPage() {
   const categoryTitleRef = useRef();
@@ -116,6 +117,12 @@ export default function CategoriesPage() {
     <Page className="px-8 py-6">
       <div className="flex items-center gap-6">
         <h3 className="text-3xl font-light">Categories</h3>
+        <Link
+          to="../menu-items"
+          className="w-fit rounded-lg border bg-gray-50 hover:bg-gray-100 transition active:scale-95 hover:shadow-lg text-gray-500 px-3 py-1"
+        >
+          Menu Items
+        </Link>
       </div>
 
       <div className="mt-8 w-full">

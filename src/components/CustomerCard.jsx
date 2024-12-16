@@ -1,4 +1,4 @@
-import { IconCalendarPlus, IconCalendarTime, IconMail, IconPhone, IconUser, IconX } from "@tabler/icons-react";
+import { IconCalendarPlus, IconMail, IconPhone, IconUser, IconX } from "@tabler/icons-react";
 import React from "react";
 import { iconStroke } from "../config/config";
 

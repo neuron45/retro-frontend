@@ -816,7 +816,7 @@ export default function POSPage() {
     <Page className='px-4 py-3 flex flex-col min-h-0'>
 
       <div className="flex md:items-center justify-between flex-col md:flex-row gap-2">
-        <h3>POS - Point of Sale</h3>
+        <h3>POS</h3>
         <div className='flex flex-wrap items-center gap-4'>
           <button onClick={btnInitNewOrder} className="text-sm rounded-lg border bg-red-50 hover:bg-gray-100 transition active:scale-95 hover:shadow-lg text-gray-500 px-2 py-1 flex items-center gap-1">
             <IconRowRemove size={18} stroke={iconStroke}  /> Clear
