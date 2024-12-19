@@ -10,7 +10,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { setDetailsForReceiptPrint } from '../helpers/ReceiptHelper';
 import { SocketContext } from "../contexts/SocketContext";
 import { initSocket } from '../utils/socket';
-import { getImageURL } from '../helpers/ImageHelper';
 import { getUserDetailsInLocalStorage } from '../helpers/UserDetails';
 import AsyncCreatableSelect from 'react-select/async-creatable';
 import DialogAddCustomer from '../components/DialogAddCustomer';
@@ -913,7 +912,7 @@ export default function POSPage() {
           }).map((menuItem,i)=>{
             const {title, id, net_price, image, category_id, category_title, addons, variants} = menuItem;
 
-            const imageURL = image ? getImageURL(image) : null;
+            const imageURL = image ? image : null;
             const hasVariantOrAddon = variants?.length > 0 || addons?.length > 0;
 
             return <div className='bg-white border border-restro-border-green-light rounded-2xl p-2 flex gap-2' key={i}>

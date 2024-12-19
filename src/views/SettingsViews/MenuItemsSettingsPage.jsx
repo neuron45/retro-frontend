@@ -7,7 +7,6 @@ import toast from "react-hot-toast";
 import { mutate } from "swr";
 import { Link, useNavigate } from "react-router-dom";
 import { addMenuItem, deleteMenuItem, useMenuItems } from "../../controllers/menu_item.controller";
-import { getImageURL } from "../../helpers/ImageHelper";
 import { AddFab } from "../../components/Fab";
 import { useInventoryItems } from "../../controllers/inventory.controller";
 
@@ -127,7 +126,7 @@ export default function MenuItemsSettingsPage() {
       <div className="mt-8 w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
         {(menuItems || []).map((menuItem, index) => {
           const { id, title, net_price, tax_id, category_id, category_title, addons, variants, image } = menuItem;
-          const imageURL = image ? getImageURL(image) : null;
+          const imageURL = image ? image : null;
 
           return (
             <div

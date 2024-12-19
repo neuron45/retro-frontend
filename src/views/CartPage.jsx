@@ -1,7 +1,6 @@
 import React, { useState, useEffect , useRef, useContext} from 'react';
 import { IconChevronRight, IconCarrot, IconTrash, IconMinus, IconPlus, IconShoppingCartX, IconMoodEmptyFilled, IconChevronLeft, IconCheck, IconX, IconTable, IconShovelPitchforks, IconDoor, IconNote } from '@tabler/icons-react';
 import { createOrderFromQrMenu, getCart, setCart } from '../controllers/qrmenu.controller';
-import { getImageURL } from '../helpers/ImageHelper';
 import { iconStroke } from '../config/config';
 import { useLocation, useParams , useNavigate } from 'react-router-dom';
 import { toast } from "react-hot-toast";
@@ -263,7 +262,7 @@ const CartPage = () => {
           {cartItems.length > 0 ? (
             cartItems.map((item, i) => {
               const { id, title, net_price, quantity, image , notes} = item;
-              const imageURL = getImageURL(image);
+              const imageURL = image;
 
               return (
                 <div key={i} className="w-full bg-white rounded-lg p-2 mb-2 flex items-center justify-between">

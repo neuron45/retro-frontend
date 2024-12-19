@@ -17,7 +17,6 @@ import {
   getQRMenuInit,
 } from "../controllers/qrmenu.controller";
 import { CURRENCIES } from "../config/currencies.config";
-import { getImageURL } from "../helpers/ImageHelper";
 import toast from "react-hot-toast";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { getQRMenuLink } from "../helpers/QRMenuHelper";
@@ -401,7 +400,7 @@ export default function QRMenuPage() {
               // addon {id, item_id, title, price}
               // variant {id, item_id, title, price}
 
-              const imageURL = getImageURL(image);
+              const imageURL = image;
               const hasVariantOrAddon =
                 variants?.length > 0 || addons?.length > 0;
 

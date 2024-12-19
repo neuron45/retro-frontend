@@ -8,7 +8,6 @@ import { mutate } from "swr";
 import { IconCarrot, IconChevronDown, IconPencil, IconTrash, IconUpload } from "@tabler/icons-react";
 import { iconStroke } from "../../config/config"
 import imageCompression from "browser-image-compression";
-import { getImageURL } from "../../helpers/ImageHelper";
 
 export default function MenuItemViewPage() {
   const params = useParams();
@@ -81,7 +80,7 @@ export default function MenuItemViewPage() {
     tax_group_id,
     tax_group_title
   } = menuItem;
-  const imageURL = image ? getImageURL(image) : null;
+  const imageURL = image ? image : null;
 
 
   async function btnSave() {

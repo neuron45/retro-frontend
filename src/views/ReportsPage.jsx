@@ -4,7 +4,6 @@ import { IconCarrot, IconFilter } from "@tabler/icons-react";
 import { iconStroke } from "../config/config";
 import { useReports } from "../controllers/reports.controller"
 import { CURRENCIES } from "../config/currencies.config";
-import { getImageURL } from "../helpers/ImageHelper";
 
 export default function ReportsPage() {
   const filters = [
@@ -95,7 +94,7 @@ export default function ReportsPage() {
             {/* item */}
             {topSellingItems.map((item,i)=>{
               // 
-              const imageURL = item.image ? getImageURL(item.image) : null;
+              const imageURL = item.image ? item.image : null;
 
               return <div className='mb-4 flex items-center gap-2 w-full' key={i}>
                 <div className="bg-gray-100 text-gray-500 flex items-center justify-center w-12 h-12 rounded-lg">

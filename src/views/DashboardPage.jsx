@@ -5,7 +5,6 @@ import { iconStroke } from "../config/config";
 import { Link } from "react-router-dom";
 import { useDashboard } from '../controllers/dashboard.controller';
 import { CURRENCIES } from "../config/currencies.config";
-import { getImageURL } from '../helpers/ImageHelper';
 
 export default function DashboardPage() {
 
@@ -116,7 +115,7 @@ export default function DashboardPage() {
             {/* item */}
             {topSellingItems.map((item,i)=>{
 
-              const imageURL = item.image ? getImageURL(item.image) : null;
+              const imageURL = item.image ? item.image : null;
               return <div className='mb-4 flex items-center gap-2 w-full' key={i}>
                 <div className="bg-gray-100 text-gray-500 flex items-center justify-center w-12 h-12 rounded-lg">
                   

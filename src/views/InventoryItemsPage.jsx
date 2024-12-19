@@ -15,7 +15,6 @@ import { toast } from "react-hot-toast";
 import { mutate } from "swr";
 import { searchInvoices } from "../controllers/invoices.controller";
 import { addInventoryItem, addInventoryMovememt, updateInventoryItem, useInventoryItems, useInventoryUnits } from "../controllers/inventory.controller";
-import { getImageURL } from "../helpers/ImageHelper";
 import { AddFab } from "../components/Fab";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -407,7 +406,7 @@ const btnShowAddStock = (id, type) => {
                   unitTitle,
                   imageUrl
                 } = item;
-                const imageURL = imageUrl ? getImageURL(imageUrl) : null;
+                const imageURL = imageUrl ? imageUrl: null;
 
                 return <tr key={index}>
                   <td>{id}</td>
