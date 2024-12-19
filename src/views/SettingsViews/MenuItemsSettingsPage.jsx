@@ -14,7 +14,6 @@ import { useInventoryItems } from "../../controllers/inventory.controller";
 export default function MenuItemsSettingsPage() {
   const navigate = useNavigate();
   const titleRef = useRef();
-  const priceRef = useRef();
   const netPriceRef = useRef();
   const taxGroupIdRef = useRef();
   const categoryIdRef = useRef();
@@ -47,7 +46,6 @@ export default function MenuItemsSettingsPage() {
 
   async function btnAdd() {
     const title = titleRef.current.value;
-    const price = priceRef.current.value;
     const netPrice = netPriceRef.current.value || null;
     const categoryId = categoryIdRef.current.value || null;
     const taxGroupId = taxGroupIdRef.current.value || null;
@@ -57,18 +55,17 @@ export default function MenuItemsSettingsPage() {
       return;
     }
 
-    if(price < 0) {
+    if(netPrice < 0) {
       toast.error("Please provide valid price!");
       return;
     }
 
     try {
       toast.loading("Please wait...");
-      const res = await addMenuItem(title, price, netPrice, categoryId, taxGroupId);
+      const res = await addMenuItem(title, netPrice, categoryId, taxGroupId);
 
       if(res.status == 200) {
         titleRef.current.value = null;
-        priceRef.current.value = null;
         netPriceRef.current.value = null;
         categoryIdRef.current.value = null;
         taxGroupIdRef.current.value = null;
@@ -128,8 +125,8 @@ export default function MenuItemsSettingsPage() {
       </div>
 
       <div className="mt-8 w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-        {menuItems.map((menuItem, index) => {
-          const { id, title, price, net_price, tax_id, category_id, category_title, addons, variants, image } = menuItem;
+        {(menuItems || []).map((menuItem, index) => {
+          const { id, title, net_price, tax_id, category_id, category_title, addons, variants, image } = menuItem;
           const imageURL = image ? getImageURL(image) : null;
 
           return (
@@ -143,7 +140,7 @@ export default function MenuItemsSettingsPage() {
               </div>
               <div className="flex-1">
                 <p>
-                  {title} - {price}
+                  {title} - {net_price}
                 </p>
                 <p className="text-gray-400 text-xs">
                   {category_title}
@@ -194,21 +191,6 @@ export default function MenuItemsSettingsPage() {
           </div>
 
           <div className="flex gap-4 w-full my-4">
-            <div className="flex-1">
-              <label
-                htmlFor="price"
-                className="mb-1 block text-gray-500 text-sm"
-              >
-                Price
-              </label>
-              <input
-                ref={priceRef}
-                type="number"
-                name="price"
-                className="text-sm w-full border rounded-lg px-4 py-2 bg-gray-50 outline-restro-border-green-light"
-                placeholder="Enter Item Price"
-              />
-            </div>
             <div className="flex-1">
               <label
                 htmlFor="nprice"

@@ -15,7 +15,6 @@ export default function MenuItemViewPage() {
   const itemId = params.id;
 
   const titleRef = useRef();
-  const priceRef = useRef();
   const netPriceRef = useRef();
   const taxGroupIdRef = useRef();
   const categoryIdRef = useRef();
@@ -75,7 +74,6 @@ export default function MenuItemViewPage() {
     title,
     category_id,
     category_title,
-    price,
     net_price,
     addons,
     variants,
@@ -88,7 +86,6 @@ export default function MenuItemViewPage() {
 
   async function btnSave() {
     const title = titleRef.current.value;
-    const price = priceRef.current.value;
     const netPrice = netPriceRef.current.value || null;
     const categoryId = categoryIdRef.current.value || null;
     const taxGroupId = taxGroupIdRef.current.value || null;
@@ -98,14 +95,14 @@ export default function MenuItemViewPage() {
       return;
     }
 
-    if(price < 0) {
+    if(netPrice < 0) {
       toast.error("Please provide valid price!");
       return;
     }
 
     try {
       toast.loading("Please wait...");
-      const res = await updateMenuItem(id, title, price, netPrice, categoryId, taxGroupId);
+      const res = await updateMenuItem(id, title, netPrice, categoryId, taxGroupId);
 
       if(res.status == 200) {
         await mutate(APIURL);
@@ -204,10 +201,10 @@ export default function MenuItemViewPage() {
     }
   }
 
-  const btnShowVariantUpdate = (variantId, title, price) => {
+  const btnShowVariantUpdate = (variantId, title, netPrice) => {
     variantIdRef.current.value = variantId;
     variantTitleUpdateRef.current.value = title;
-    variantPriceUpdateRef.current.value = price;
+    variantPriceUpdateRef.current.value = netPrice;
     document.getElementById('modal-update-variant').showModal()
   };
 
@@ -428,9 +425,8 @@ export default function MenuItemViewPage() {
             </div>
             {/* upload image options */}
           </div>
-          <p>Price: {price}</p>
           {net_price && (
-            <p className="text-sm text-gray-500">Net Price: {net_price}</p>
+            <p>Net Price: {net_price}</p>
           )}
           {category_id && (
             <p className="text-sm text-gray-500">Category: {category_title}</p>
@@ -461,22 +457,6 @@ export default function MenuItemViewPage() {
           <div className="flex gap-4 w-full my-4 flex-col lg:flex-row">
             <div className="flex-1">
               <label
-                htmlFor="price"
-                className="mb-1 block text-gray-500 text-sm"
-              >
-                Price
-              </label>
-              <input
-                ref={priceRef}
-                defaultValue={price}
-                type="number"
-                name="price"
-                className="text-sm w-full border rounded-lg px-4 py-2 bg-gray-50 outline-restro-border-green-light"
-                placeholder="Enter Item Price"
-              />
-            </div>
-            <div className="flex-1">
-              <label
                 htmlFor="nprice"
                 className="mb-1 block text-gray-500 text-sm"
               >
@@ -491,9 +471,6 @@ export default function MenuItemViewPage() {
                 placeholder="Enter Item Net Price"
               />
             </div>
-          </div>
-
-          <div className="flex gap-4 w-full my-4 flex-col lg:flex-row">
             <div className="flex-1">
               <label
                 htmlFor="category"
@@ -518,7 +495,10 @@ export default function MenuItemViewPage() {
                 })}
               </select>
             </div>
-            <div className="flex-1">
+          </div>
+
+          <div className="flex gap-4 w-full my-4 flex-col lg:flex-row">
+            <div className="w-1/2">
               <label htmlFor="tax_group_id" className="mb-1 block text-gray-500 text-sm">
                 Tax Group
               </label>
@@ -553,12 +533,12 @@ export default function MenuItemViewPage() {
                   return <div key={variant.id} className="flex items-center justify-between hover:bg-gray-100 transition p-2 rounded-lg cursor-pointer">
                     <div className="flex-1">
                       <p>{variant.title}</p>
-                      <p className="text-xs text-gray-500">Price: {variant.price}</p>
+                      <p className="text-xs text-gray-500">Price: {variant.net_price}</p>
                     </div>
                     <div className="flex items-center">
                       <button
                         onClick={() => {
-                          btnShowVariantUpdate(variant.id, variant.title, variant.price);
+                          btnShowVariantUpdate(variant.id, variant.title, variant.net_price);
                         }}
                         className="w-8 h-8 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-200 transition active:scale-95"
                       >
@@ -594,7 +574,7 @@ export default function MenuItemViewPage() {
                   return <div key={addon.id} className="flex items-center justify-between hover:bg-gray-100 transition p-2 rounded-lg cursor-pointer">
                     <div className="flex-1">
                       <p>{addon.title}</p>
-                      <p className="text-xs text-gray-500">Price Increase: +{addon.price}</p>
+                      <p className="text-xs text-gray-500">Price Increase: +{addon.net_price}</p>
                     </div>
                     <div className="flex items-center">
                       <button

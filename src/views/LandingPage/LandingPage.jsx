@@ -4,11 +4,10 @@ import { Link } from "react-router-dom";
 import {
   IconChefHat,
   IconDeviceIpadHorizontal,
-  IconDeviceTablet,
   IconLayout,
 } from "@tabler/icons-react";
-import Logo from "../../assets/logo.svg";
 import { subscriptionPrice } from "../../config/config";
+import Footer from "./Footer";
 
 export default function LadingPage() {
   return (
@@ -113,10 +112,17 @@ export default function LadingPage() {
           <h3 className="text-4xl text-red-700 font-bold text-center">{subscriptionPrice}</h3>
           <h3 className=" font-bold text-2xl text-center">per month</h3>
           <ul className="text-gray-700 mt-6 flex flex-col gap-2 text-start">
+            <li>✅ Monthly Renewals</li>
             <li>✅ Unlimited Orders</li>
-            <li>✅ Monthly Renewls</li>
             <li>✅ Unlimited Devices</li>
+            <li>✅ Unlimited Reservations</li>
             <li>✅ Live Kitchen Orders</li>
+            <li>✅ Unlimited Users</li>
+            <li>✅ QR Code orders</li>
+            <li>✅ Inventory Management</li>
+            <li>✅ Customer Management</li>
+            <li>✅ Kitchen order sound feedback</li>
+            <li>✅ Real-time</li>
           </ul>
         </div>
       </div>
@@ -142,33 +148,7 @@ export default function LadingPage() {
       {/* contact */}
 
       {/* footer */}
-      <div className="w-full border-t">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 container mx-auto px-4 py-3">
-          <div>
-            <img src={Logo} alt="logo" className="h-12" />
-          </div>
-          <div className="flex flex-col lg:flex-row lg:items-center">
-            <a
-              className="hover:bg-gray-100 text-gray-700 rounded-full px-4 py-2 transition active:scale-95"
-              href="#"
-            >
-              Privacy Policy
-            </a>
-            <a
-              className="hover:bg-gray-100 text-gray-700 rounded-full px-4 py-2 transition active:scale-95"
-              href="#"
-            >
-              Refund Policy
-            </a>
-            <a
-              className="hover:bg-gray-100 text-gray-700 rounded-full px-4 py-2 transition active:scale-95"
-              href="#"
-            >
-              Terms &amp; Conditions
-            </a>
-          </div>
-        </div>
-      </div>
+      <Footer />
       {/* footer */}
     </div>
   );

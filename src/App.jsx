@@ -54,6 +54,8 @@ import OrderSuccessPage from "./views/OrderSuccessPage";
 import OrderFailedPage from "./views/OrderFailedPage";
 import TaxGroupsPage from "./views/SettingsViews/TaxGroupsPage";
 import InventoryItemsPage from "./views/InventoryItemsPage";
+import PrivacyPage from "./views/LandingPage/PrivacyPage";
+import TermsPage from "./views/LandingPage/TermsPage";
 
 export default function App() {
   const [isNavbarCollapsed, setIsNavbarCollapsed] = useState(
@@ -66,6 +68,8 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms-and-conditions" element={<TermsPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegistrationPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />

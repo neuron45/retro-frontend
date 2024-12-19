@@ -11,7 +11,13 @@ import { SocketContext } from '../contexts/SocketContext';
 const CartPage = () => {
   const { socket, isSocketConnected } = useContext(SocketContext);
 
-  const [state, setState] = useState({ cartItems: [], itemsTotal: 0, taxTotal: 0, payableTotal: 0 });
+  const [state, setState] = useState({ 
+    cartItems: [],
+    itemsTotal: 0,
+    taxTotal: 0,
+    payableTotal: 0,
+    taxBreakdown: {}
+  });
   const [showPhoneFields, setShowPhoneFields] = useState(false);
   const [selectedCustomerType, setSelectedCustomerType] = useState(null);
   const params = useParams();
@@ -31,11 +37,11 @@ const CartPage = () => {
   useEffect(() => {
     const storedCart = getCart() || [];
     setState({ ...state, cartItems: storedCart });
-    const { itemsTotal, taxTotal, payableTotal } = calculateOrderSummary(storedCart);
-    setState((prevState) => ({ ...prevState, itemsTotal, taxTotal, payableTotal }));
+    const { itemsTotal, taxTotal, payableTotal, taxBreakdown } = calculateOrderSummary(storedCart);
+    setState((prevState) => ({ ...prevState, itemsTotal, taxTotal, payableTotal, taxBreakdown }));
   }, []);
 
-  const { cartItems, itemsTotal, taxTotal, payableTotal } = state;
+  const { cartItems, itemsTotal, taxTotal, payableTotal, taxBreakdown } = state;
 
   const sendNewOrderEvent = () => {
     if (isSocketConnected) {
@@ -75,40 +81,73 @@ const CartPage = () => {
   }
 
   const updateCart = (items) => {
-    const { itemsTotal, taxTotal, payableTotal } = calculateOrderSummary(items);
-    setState({ ...state, cartItems: items, itemsTotal, taxTotal, payableTotal });
+    const { itemsTotal, taxTotal, payableTotal, taxBreakdown } = calculateOrderSummary(items);
+    setState({ ...state, cartItems: items, itemsTotal, taxTotal, payableTotal, taxBreakdown });
   };
 
   const calculateOrderSummary = (items) => {
-    let itemsTotal = 0;
+    let itemsTotal = 0; // without tax - net amount
     let taxTotal = 0;
     let payableTotal = 0;
-
+    let tBreakdown = {};
+  
     items.forEach((item) => {
-      const taxRate = Number(item.tax_rate);
-      const taxType = item.tax_type;
-      const itemPrice = Number(item.price) * Number(item.quantity);
-
-      if (taxType === 'exclusive') {
-        const tax = (itemPrice * taxRate) / 100;
-        taxTotal += tax;
-        itemsTotal += itemPrice;
-        payableTotal += itemPrice + tax;
-      } else if (taxType === 'inclusive') {
-        const tax = itemPrice - (itemPrice * (100 / (100 + taxRate)));
-        taxTotal += tax;
-        itemsTotal += itemPrice - tax;
-        payableTotal += itemPrice;
+      const taxGroup = item.taxGroup;
+      const itemPrice = Number(item.net_price) * Number(item.quantity);
+      let itemTaxTotal = 0;
+      let priceBeforeTax = itemPrice;
+      let finalPrice = itemPrice;
+  
+      if (taxGroup && taxGroup.taxes && taxGroup.taxes.length > 0) {
+        // Process each tax in the tax group
+        taxGroup.taxes.forEach((tax) => {
+          const taxRate = Number(tax.rate);
+          const taxType = tax.type;
+          let taxAmount = 0;
+  
+          if (taxType === "exclusive") {
+            // For exclusive tax, add tax amount to price
+            taxAmount = (itemPrice * taxRate) / 100;
+            itemTaxTotal += taxAmount;
+            finalPrice += taxAmount;
+          } else if (taxType === "inclusive") {
+            // For inclusive tax, extract tax amount from price
+            taxAmount = itemPrice - (itemPrice * (100 / (100 + taxRate)));
+            itemTaxTotal += taxAmount;
+            priceBeforeTax -= taxAmount;
+          }
+  
+          // Add to tax breakdown
+          if (!tBreakdown[tax.title]) {
+            tBreakdown[tax.title] = {
+              taxTitle: tax.title,
+              totalAmount: 0
+            };
+          }
+          tBreakdown[tax.title].totalAmount += taxAmount;
+        });
+  
+        // Add to running totals
+        taxTotal += itemTaxTotal;
+        itemsTotal += priceBeforeTax;
+        payableTotal += finalPrice;
       } else {
+        // No tax group or no taxes in group
         itemsTotal += itemPrice;
         payableTotal += itemPrice;
       }
     });
-
-    return { itemsTotal, taxTotal, payableTotal };
+  
+    return {
+      itemsTotal: Number(itemsTotal.toFixed(2)),
+      taxTotal: Number(taxTotal.toFixed(2)),
+      payableTotal: Number(payableTotal.toFixed(2)),
+      taxBreakdown: tBreakdown,
+    }
   };
+  
 
-    const btnPlaceOrder = async () => {
+  const btnPlaceOrder = async () => {
 
       if (showPhoneFields) {
         const phone = phoneRef.current?.value || "";
@@ -223,7 +262,7 @@ const CartPage = () => {
         <div className="mt-4">
           {cartItems.length > 0 ? (
             cartItems.map((item, i) => {
-              const { id, title, price, quantity, image , notes} = item;
+              const { id, title, net_price, quantity, image , notes} = item;
               const imageURL = getImageURL(image);
 
               return (
@@ -242,7 +281,7 @@ const CartPage = () => {
                        {item?.variant?.title && <p>{item.variant.title}</p>}
                         {item.addons?.length > 0 && <p>{item.addons.length} Addons</p>}
                       </div>
-                      <p className="text-md">{currency}{(price * quantity).toFixed(2)}</p>
+                      <p className="text-md">{currency}{(net_price * quantity).toFixed(2)}</p>
                       {notes && <p className='text-xs text-gray-500'>Notes: {notes}</p>}
                     </div>
                   </div>

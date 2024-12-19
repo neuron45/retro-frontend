@@ -46,6 +46,7 @@ export default function OrdersPage() {
     cancelOrderIds: [],
     completeOrderIds: [],
     completeTokenIds: "",
+    taxBreakdown: {},
 
     currency: null,
 
@@ -262,8 +263,7 @@ export default function OrdersPage() {
       toast.dismiss();
 
       if (res.status == 200) {
-        const { subtotal, taxTotal, total, orders } = res.data;
-
+        const { subtotal, taxTotal, total, orders, taxBreakdown: remoteTaxBreakdown } = res.data;
 
         const tokenNoArray = orders.map(o=>o.token_no);
         const tokens = tokenNoArray.join(",");
@@ -277,6 +277,7 @@ export default function OrdersPage() {
           completeOrderIds: orderIds,
           completeTokenIds: tokens,
           order: order,
+          taxBreakdown: remoteTaxBreakdown
         });
 
         document.getElementById("modal-order-summary-complete").showModal();
@@ -362,7 +363,8 @@ export default function OrdersPage() {
             payableTotal: state.summaryTotal,
             tokenNo: state.completeTokenIds,
             orderId: orderIds,
-            paymentType
+            paymentType,
+            taxBreakdown: state.taxBreakdown
           });
 
           const receiptWindow = window.open(
@@ -394,7 +396,7 @@ export default function OrdersPage() {
       toast.dismiss();
 
       if (res.status == 200) {
-        const { subtotal, taxTotal, total, orders: ordersArr } = res.data;
+        const { subtotal, taxTotal, total, orders: ordersArr, taxBreakdown: remoteTaxBreakdown } = res.data;
 
         const orders = [];
         const orderIds = orderIdsArr.join(", ");
@@ -441,6 +443,7 @@ export default function OrdersPage() {
           payableTotal: total,
           tokenNo: tokens,
           orderId: orderIds,
+          taxBreakdown: remoteTaxBreakdown,
         });
 
         const receiptWindow = window.open(
@@ -535,8 +538,8 @@ export default function OrdersPage() {
                             btnPrintReceipt(order_ids, tokens);
                           }}
                         >
-                          <IconReceipt size={18} stroke={iconStroke} /> Print
-                          Receipt
+                          <IconReceipt size={18} stroke={iconStroke} /> 
+                          Print Receipt
                         </button>
                       </li>
                       <li>

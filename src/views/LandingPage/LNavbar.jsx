@@ -11,25 +11,25 @@ export default function LNavbar() {
     <div className="w-full backdrop-blur-md sticky top-0 bg-white/80">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       <div className="flex items-center justify-between gap-4 container mx-auto px-4 py-3">
-        <div>
+        <a href="/">
           <img src={Logo} alt="logo" className="h-12" />
-        </div>
+        </a>
         <div className="items-center hidden lg:flex">
           <a
             className="hover:bg-gray-100 text-gray-700 rounded-full px-4 py-2 transition active:scale-95"
-            href="#features"
+            href="/#features"
           >
             Features
           </a>
           <a
             className="hover:bg-gray-100 text-gray-700 rounded-full px-4 py-2 transition active:scale-95"
-            href="#pricing"
+            href="/#pricing"
           >
             Pricing
           </a>
           <a
             className="hover:bg-gray-100 text-gray-700 rounded-full px-4 py-2 transition active:scale-95"
-            href="#contact"
+            href="/#contact"
           >
             Contact
           </a>

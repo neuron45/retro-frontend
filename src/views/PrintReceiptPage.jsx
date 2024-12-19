@@ -10,7 +10,8 @@ export default function PrintReceiptPage() {
     taxTotal,
     payableTotal, 
     tokenNo,
-    orderId 
+    orderId,
+    taxBreakdown
   } = receiptDetails;
 
   const {
@@ -63,7 +64,7 @@ export default function PrintReceiptPage() {
       <div className="border-b border-dashed mt-2"></div>
       {cartItems.map((cartItem, index)=>{
 
-        const {title, quantity, notes, price, tax_rate, tax_type, tax_title, addons, addons_ids, variant } = cartItem;
+        const {title, quantity, notes, net_price, tax_rate, tax_type, tax_title, addons, addons_ids, variant } = cartItem;
 
         return <div key={index} className='w-full my-1'>
           <p>{title} {variant && <span>- {variant.title}</span>}</p>
@@ -75,8 +76,8 @@ export default function PrintReceiptPage() {
           </p>}
           {(show_notes == 1 && notes) ? <p className='mb-2 text-xs'>Notes: {notes}</p>:<></>}
           <div className='flex justify-between w-full'>
-            <p className='text-sm'>{quantity}x {currency}{Number(price).toFixed(2)}</p>
-            <p className='text-end'>{currency}{Number(quantity*price).toFixed(2)}</p>
+            <p className='text-sm'>{quantity}x {currency}{Number(net_price).toFixed(2)}</p>
+            <p className='text-end'>{currency}{Number(quantity * net_price).toFixed(2)}</p>
           </div>
         </div>
       })}
@@ -86,6 +87,12 @@ export default function PrintReceiptPage() {
         <p>Subtotal (excl. tax): </p>
         <p>{currency}{Number(itemsTotal).toFixed(2)}</p>
       </div>
+      {taxBreakdown && Object.values(taxBreakdown).map((tax) => (
+        <div key={tax.taxTitle} className="flex justify-between">
+          <p>{tax.taxTitle}</p>
+          <p>{currency}{tax.totalAmount.toFixed(2)}</p>
+        </div>
+      ))}
       <div className="flex justify-between">
         <p>Tax: </p>
         <p>{currency}{Number(taxTotal).toFixed(2)}</p>

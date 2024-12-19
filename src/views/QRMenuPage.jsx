@@ -42,6 +42,7 @@ export default function QRMenuPage() {
     cartItems: [],
     currentItemId: null,
     currency: "",
+    taxGroups: []
   });
 
   useEffect(() => {
@@ -69,6 +70,7 @@ export default function QRMenuPage() {
           storeTable: data?.storeTable || null,
           cartItems: [...storedCart],
           currency: currency?.symbol || "",
+          taxGroups: data?.taxGroups
         });
       }
     } catch (error) {
@@ -157,12 +159,9 @@ export default function QRMenuPage() {
     category_title,
     id,
     imageURL,
-    price,
-    tax_id,
-    tax_rate,
-    tax_title,
-    tax_type,
-    title
+    net_price,
+    title,
+    tax_group_id,
   ) => {
     setState({
       ...state,
@@ -173,11 +172,8 @@ export default function QRMenuPage() {
         category_title: category_title,
         id,
         image: imageURL,
-        price,
-        tax_id,
-        tax_rate,
-        tax_title,
-        tax_type,
+        net_price,
+        tax_group_id,
         title,
       },
     });
@@ -190,6 +186,7 @@ export default function QRMenuPage() {
       ...item,
       quantity: 1,
       notes: null,
+      taxGroup: state.taxGroups.find(t => t.id == item.tax_group_id)
     };
 
     const newCart = cartItems;
@@ -204,7 +201,7 @@ export default function QRMenuPage() {
   }
 
   const btnAddMenuItemToCartWithVariantsAndAddon = () => {
-    let price = 0;
+    let netPrice = 0;
     let selectedVariantId = null;
     const selectedAddonsId = [];
 
@@ -217,7 +214,7 @@ export default function QRMenuPage() {
     });
 
 
-    price = parseFloat(currentItem.price);
+    netPrice = parseFloat(currentItem.net_price);
 
     const itemAddons = document.getElementsByName("addons");
     itemAddons.forEach((item) => {
@@ -232,7 +229,7 @@ export default function QRMenuPage() {
     let selectedVariant = null;
     if (selectedVariantId) {
       selectedVariant = variants.find((v) => v.id == selectedVariantId);
-      price = parseFloat(selectedVariant.price);
+      netPrice = parseFloat(selectedVariant.net_price);
     }
 
     let selectedAddons = [];
@@ -241,14 +238,14 @@ export default function QRMenuPage() {
         addons.find((addon) => addon.id == addonId)
       );
       selectedAddons.forEach((addon) => {
-        const addonPrice = parseFloat(addon.price);
-        price += addonPrice;
+        const addonPrice = parseFloat(addon.net_price);
+        netPrice += addonPrice;
       });
     }
 
     const itemCart = {
       ...currentItem,
-      price: price,
+      net_price: netPrice,
       variant_id: selectedVariantId,
       variant: selectedVariant,
       addons_ids: selectedAddonsId,
@@ -397,11 +394,8 @@ export default function QRMenuPage() {
                 category_title,
                 id,
                 image,
-                price,
-                tax_id,
-                tax_rate,
-                tax_title,
-                tax_type,
+                net_price,
+                tax_group_id,
                 title,
               } = item;
               // addon {id, item_id, title, price}
@@ -429,11 +423,8 @@ export default function QRMenuPage() {
                             category_title,
                             id,
                             image ? imageURL : null,
-                            price,
-                            tax_id,
-                            tax_rate,
-                            tax_title,
-                            tax_type,
+                            net_price,
+                            tax_group_id,
                             title
                           )
                       : undefined
@@ -465,11 +456,8 @@ export default function QRMenuPage() {
                                 category_title,
                                 id,
                                 image ? imageURL : null,
-                                price,
-                                tax_id,
-                                tax_rate,
-                                tax_title,
-                                tax_type,
+                                net_price,
+                                tax_group_id,
                                 title
                               );
                             } else {
@@ -494,7 +482,7 @@ export default function QRMenuPage() {
                     <p className="text-lg">{title}</p>
                     <p className="text-sm text-restro-green font-bold">
                       {currency}
-                      {price}
+                      {net_price}
                     </p>
                     {category_id && (
                       <p className="mt-2 text-xs text-gray-500">
@@ -616,7 +604,7 @@ export default function QRMenuPage() {
                 <p className="text-lg">{currentItem?.title}</p>
                 <p className="text-sm text-restro-green font-bold">
                   {currency}
-                  {currentItem?.price}
+                  {currentItem?.net_price}
                 </p>
                 {currentItem?.category_id && (
                   <p className="mt-2 text-xs text-gray-500">
@@ -640,7 +628,7 @@ export default function QRMenuPage() {
                   <h3>Variants</h3>
                   <div className="flex flex-col gap-2 mt-2">
                     {currentItem?.variants?.map((variant, index) => {
-                      const { id, title, price } = variant;
+                      const { id, title, net_price } = variant;
                       return (
                         <label
                           key={index}
@@ -656,7 +644,7 @@ export default function QRMenuPage() {
                           />
                           <span className="label-text">
                             {title} - {currency}
-                            {price}
+                            {net_price}
                           </span>
                         </label>
                       );
@@ -670,7 +658,7 @@ export default function QRMenuPage() {
                   <h3>Addons</h3>
                   <div className="flex flex-col gap-2 mt-2">
                     {currentItem?.addons?.map((addon, index) => {
-                      const { id, title, price } = addon;
+                      const { id, title, net_price } = addon;
                       return (
                         <label
                           key={index}
@@ -684,7 +672,7 @@ export default function QRMenuPage() {
                           />
                           <span className="label-text">
                             {title} (+{currency}
-                            {price})
+                            {net_price})
                           </span>
                         </label>
                       );

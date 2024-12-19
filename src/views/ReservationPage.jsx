@@ -25,6 +25,7 @@ import { SCOPES } from "../config/scopes";
 import { getUserDetailsInLocalStorage } from "../helpers/UserDetails";
 import AsyncCreatableSelect from 'react-select/async-creatable';
 import DialogAddCustomer from '../components/DialogAddCustomer';
+import { AddFab } from "../components/Fab";
 
 export default function ReservationPage() {
 
@@ -363,16 +364,6 @@ export default function ReservationPage() {
       <div className="flex flex-wrap gap-4 flex-col md:flex-row md:items-center md:justify-between">
         <div className="flex gap-6">
           <h3 className="text-2xl">Reservations</h3>
-          {
-            isManageAllowed && <button
-            onClick={() => {
-              document.getElementById("modal-add").showModal();
-            }}
-            className="rounded-lg border bg-gray-50 hover:bg-gray-100 transition active:scale-95 hover:shadow-lg text-gray-500 px-2 py-1 flex items-center gap-1"
-          >
-            <IconPlus size={22} stroke={iconStroke} /> New
-          </button>
-          }
         </div>
 
         <div className="flex gap-2">
@@ -901,6 +892,13 @@ export default function ReservationPage() {
         </div>
       </dialog>
       {/* update dialog */}
+      {
+        isManageAllowed && <AddFab
+            onclick={() => {
+              document.getElementById("modal-add").showModal();
+            }}
+        /> 
+      }
     </Page>
   );
 }

@@ -25,11 +25,10 @@ export function useMenuItem(id) {
   };
 }
 
-export async function addMenuItem(title, price, netPrice, categoryId, taxGroupId) {
+export async function addMenuItem(title, netPrice, categoryId, taxGroupId) {
   try {
     const response = await ApiClient.post("/menu-items/add", {
       title,
-      price,
       netPrice,
       categoryId,
       taxGroupId,
@@ -40,11 +39,10 @@ export async function addMenuItem(title, price, netPrice, categoryId, taxGroupId
   }
 }
 
-export async function updateMenuItem(id, title, price, netPrice, categoryId, taxGroupId) {
+export async function updateMenuItem(id, title, netPrice, categoryId, taxGroupId) {
   try {
     const response = await ApiClient.post(`/menu-items/update/${id}`, {
       title,
-      price,
       netPrice,
       categoryId,
       taxGroupId,
@@ -81,11 +79,11 @@ export async function deleteMenuItem(id) {
   }
 };
 
-export async function addMenuItemVariant(itemId, title, price) {
+export async function addMenuItemVariant(itemId, title, netPrice) {
   try {
     const response = await ApiClient.post(`/menu-items/variants/${itemId}/add`, {
       title,
-      price
+      netPrice
     });
     return response;
   } catch (error) {
@@ -93,11 +91,11 @@ export async function addMenuItemVariant(itemId, title, price) {
   }
 }
 
-export async function updateMenuItemVariant(itemId, variantId, title, price) {
+export async function updateMenuItemVariant(itemId, variantId, title, netPrice) {
   try {
     const response = await ApiClient.post(`/menu-items/variants/${itemId}/update/${variantId}`, {
       title,
-      price
+      netPrice
     });
     return response;
   } catch (error) {
@@ -114,11 +112,11 @@ export async function deleteMenuItemVariant(itemId, variantId) {
   }
 };
 
-export async function addMenuItemAddon(itemId, title, price) {
+export async function addMenuItemAddon(itemId, title, netPrice) {
   try {
     const response = await ApiClient.post(`/menu-items/addons/${itemId}/add`, {
       title,
-      price
+      netPrice
     });
     return response;
   } catch (error) {
@@ -126,11 +124,11 @@ export async function addMenuItemAddon(itemId, title, price) {
   }
 }
 
-export async function updateMenuItemAddon(itemId, addonId, title, price) {
+export async function updateMenuItemAddon(itemId, addonId, title, netPrice) {
   try {
     const response = await ApiClient.post(`/menu-items/addons/${itemId}/update/${addonId}`, {
       title,
-      price
+      netPrice
     });
     return response;
   } catch (error) {

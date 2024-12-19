@@ -18,7 +18,6 @@ import DialogAddCustomer from '../components/DialogAddCustomer';
 export default function POSPage() {
   const user = getUserDetailsInLocalStorage();
   const { socket, isSocketConnected } = useContext(SocketContext);
-  const navigate = useNavigate();
 
   const diningOptionRef = useRef();
   const paymentTypeRef = useRef();
@@ -48,8 +47,10 @@ export default function POSPage() {
     printSettings: null,
     storeSettings: null,
     storeTables: [],
+    taxGroups: [],
     currency: "",
     isLoading: true,
+    taxBreakdown: {},
 
     cartItems: [],
     customerType: "WALKIN",
@@ -87,6 +88,8 @@ export default function POSPage() {
     printSettings,
     storeSettings,
     storeTables,
+    taxGroups,
+    taxBreakdown,
     currency,
     cartItems,
     searchQuery,
@@ -136,6 +139,7 @@ export default function POSPage() {
           storeTables: data.storeTables,
           currency: currency?.symbol || "",
           qrOrdersCount: totalQROrders || 0,
+          taxGroups: data.taxGroups,
           isLoading: false,
         });
       }
@@ -203,8 +207,10 @@ export default function POSPage() {
     const modifiedItem = {
       ...item,
       quantity: 1,
-      notes: null
+      notes: null,
+      taxGroup: taxGroups.find(tg => tg.id === item.tax_group_id)
     }
+
     if(!cartItems) {
       setState({
         ...state,
@@ -302,7 +308,7 @@ export default function POSPage() {
     document.getElementById('modal-variants-addons').showModal()
   }
   const btnAddMenuItemToCartWithVariantsAndAddon = () => {
-    let price = 0;
+    let net_price = 0;
     let selectedVariantId = null;
     const selectedAddonsId = [];
 
@@ -330,21 +336,21 @@ export default function POSPage() {
     let selectedVariant = null;
     if(selectedVariantId) {
       selectedVariant = variants.find((v)=>v.id == selectedVariantId);
-      price = parseFloat(selectedVariant.price);
+      net_price = parseFloat(selectedVariant.net_price);
     } else {
-      price = parseFloat(selectedVariant?.price ?? selectedItem.price)
+      net_price = parseFloat(selectedVariant?.net_price ?? selectedItem.net_price)
     }
 
     let selectedAddons = [];
     if(selectedAddonsId.length > 0) {
       selectedAddons = selectedAddonsId.map((addonId)=>addons.find((addon)=>addon.id == addonId))
       selectedAddons.forEach((addon)=>{
-        const addonPrice = parseFloat(addon.price);
-        price = price + addonPrice
+        const addonPrice = parseFloat(addon.net_price);
+        net_price = net_price + addonPrice
       });
     }
 
-    const itemCart = {...selectedItem, price: price, variant_id: selectedVariantId, variant: selectedVariant, addons_ids: selectedAddonsId, addons: selectedAddons}
+    const itemCart = {...selectedItem, net_price, variant_id: selectedVariantId, variant: selectedVariant, addons_ids: selectedAddonsId, addons: selectedAddons}
     addItemToCart(itemCart)
   };
   // variant, addon modal
@@ -507,6 +513,7 @@ export default function POSPage() {
         ...item,
         id: id,
         title: item.item_title,
+        taxGroup: taxGroups.find(t => t.id === item.tax_group_id),
         addons_ids: item?.addons?.map((i)=>i.id)
       }
     })
@@ -570,48 +577,75 @@ export default function POSPage() {
     let itemsTotal = 0; // without tax - net amount
     let taxTotal = 0;
     let payableTotal = 0;
-
-    cartItems.forEach((item)=>{
-      const taxId = item.tax_id;
-      const taxTitle = item.tax_title;
-      const taxRate = Number(item.tax_rate);
-      const taxType = item.tax_type; // inclusive or exclusive or NULL
-
-      const itemPrice = Number(item.price) * Number(item.quantity);
-
-      if (taxType == "exclusive") {
-        const tax = (itemPrice * taxRate) / 100;
-        const priceWithTax = itemPrice + tax;
-
-        taxTotal += tax;
-        itemsTotal += itemPrice;
-        payableTotal += priceWithTax;
-      } else if (taxType == "inclusive") {
-        const tax = itemPrice - (itemPrice * (100 / (100 + taxRate)));
-        const priceWithoutTax = itemPrice - tax;
-
-        taxTotal += tax;
-        itemsTotal += priceWithoutTax;
-        payableTotal += itemPrice;
+    let taxBreakdown = {};
+  
+    cartItems.forEach((item) => {
+      const taxGroup = item.taxGroup;
+      const itemPrice = Number(item.net_price) * Number(item.quantity);
+      let itemTaxTotal = 0;
+      let priceBeforeTax = itemPrice;
+      let finalPrice = itemPrice;
+  
+      if (taxGroup && taxGroup.taxes && taxGroup.taxes.length > 0) {
+        // Process each tax in the tax group
+        taxGroup.taxes.forEach((tax) => {
+          const taxRate = Number(tax.rate);
+          const taxType = tax.type;
+          let taxAmount = 0;
+  
+          if (taxType === "exclusive") {
+            // For exclusive tax, add tax amount to price
+            taxAmount = (itemPrice * taxRate) / 100;
+            itemTaxTotal += taxAmount;
+            finalPrice += taxAmount;
+          } else if (taxType === "inclusive") {
+            // For inclusive tax, extract tax amount from price
+            taxAmount = itemPrice - (itemPrice * (100 / (100 + taxRate)));
+            itemTaxTotal += taxAmount;
+            priceBeforeTax -= taxAmount;
+          }
+  
+          // Add to tax breakdown
+          if (!taxBreakdown[tax.title]) {
+            taxBreakdown[tax.title] = {
+              taxTitle: tax.title,
+              totalAmount: 0
+            };
+          }
+          taxBreakdown[tax.title].totalAmount += taxAmount;
+        });
+  
+        // Add to running totals
+        taxTotal += itemTaxTotal;
+        itemsTotal += priceBeforeTax;
+        payableTotal += finalPrice;
       } else {
+        // No tax group or no taxes in group
         itemsTotal += itemPrice;
         payableTotal += itemPrice;
       }
     });
+  
     return {
-      itemsTotal, taxTotal, payableTotal
+      itemsTotal: Number(itemsTotal.toFixed(2)),
+      taxTotal: Number(taxTotal.toFixed(2)),
+      payableTotal: Number(payableTotal.toFixed(2)),
+      taxBreakdown,
     }
   };
+  
+  
   const btnShowPayAndSendToKitchenModal = () => {
     // calculate the item - total, tax, incl. tax, excl. tax, tax total, payable total
 
-    const { itemsTotal, taxTotal, payableTotal } = calculateOrderSummary();
+    const { itemsTotal, taxTotal, payableTotal, taxBreakdown } = calculateOrderSummary();
 
     setState({
       ...state,
       itemsTotal,
       taxTotal,
-      payableTotal
+      payableTotal,
+      taxBreakdown,
     });
     document.getElementById('modal-pay-and-send-kitchen-summary').showModal();
   }
@@ -644,6 +678,7 @@ export default function POSPage() {
           itemsTotal: state.itemsTotal,
           taxTotal: state.taxTotal,
           payableTotal: state.payableTotal,
+          taxBreakdown,
           tokenNo: data.tokenNo,
           orderId: data.orderId,
           paymentTypeId
@@ -693,13 +728,14 @@ export default function POSPage() {
   const btnShowSendToKitchenModal = () => {
     // calculate the item - total, tax, incl. tax, excl. tax, tax total, payable total
 
-    const { itemsTotal, taxTotal, payableTotal } = calculateOrderSummary();
+    const { itemsTotal, taxTotal, payableTotal, taxBreakdown } = calculateOrderSummary();
 
     setState({
       ...state,
       itemsTotal,
       taxTotal,
-      payableTotal
+      payableTotal,
+      taxBreakdown
     });
     document.getElementById('modal-send-kitchen-summary').showModal();
   }
@@ -728,7 +764,8 @@ export default function POSPage() {
           taxTotal: state.taxTotal,
           payableTotal: state.payableTotal,
           tokenNo: data.tokenNo,
-          orderId: data.orderId
+          orderId: data.orderId,
+          taxBreakdown
         });
 
         sendNewOrderEvent(data.tokenNo, data.orderId);
@@ -874,7 +911,7 @@ export default function POSPage() {
             }
             return new String(menuItem.title).trim().toLowerCase().includes(searchQuery.trim().toLowerCase());
           }).map((menuItem,i)=>{
-            const {title, id, price, image, category_id, category_title, addons, variants} = menuItem;
+            const {title, id, net_price, image, category_id, category_title, addons, variants} = menuItem;
 
             const imageURL = image ? getImageURL(image) : null;
             const hasVariantOrAddon = variants?.length > 0 || addons?.length > 0;
@@ -885,7 +922,7 @@ export default function POSPage() {
               </div>
               <div>
                 <p>{title}</p>
-                <p>{currency}{price}</p>
+                <p>{currency}{net_price}</p>
 
                 <p className="mt-2 text-xs text-gray-500">{category_title}</p>
                 <p className="mt-1 text-xs text-gray-500">{variants?.length > 0 && <span>{variants?.length} Variants</span>} {addons?.length > 0 && <span>{addons?.length} Addons</span>}</p>
@@ -917,7 +954,7 @@ export default function POSPage() {
           <div className='sticky w-full px-4 py-4 bg-gradient-to-b from-white to-white/0 border-b rounded-t-2xl'>
             {/* search customer */}
             <div onClick={btnOpenSearchCustomerModal} className="flex items-center gap-2">
-              <input value={customerType=="WALKIN"?"WALKIN CUSTOMER":`${customer.name}`} type="text" placeholder='Search Customer' className='cursor-pointer text-sm w-full border rounded-lg px-4 py-2 bg-gray-50 outline-restro-border-green-light'  />
+              <input defaultValue={customerType=="WALKIN"?"WALKIN CUSTOMER":`${customer.name}`} type="text" placeholder='Search Customer' className='cursor-pointer text-sm w-full border rounded-lg px-4 py-2 bg-gray-50 outline-restro-border-green-light'  />
               <button onClick={btnOpenSearchCustomerModal} className="rounded-lg border bg-gray-50 hover:bg-gray-100 transition active:scale-95 hover:shadow-lg text-gray-500 flex items-center justify-center w-9 h-9">
                 <IconSearch size={18} stroke={iconStroke} />
               </button>
@@ -950,11 +987,11 @@ export default function POSPage() {
           <div className='flex-1 flex flex-col gap-4 overflow-y-auto px-4 pb-36'>
             <div className="h-4"></div>
             {cartItems?.map((cartItem, i)=>{
-              const {quantity, notes, title, price, variant, addons} = cartItem;
-              const itemTotal = price * quantity;
+              const {quantity, notes, title, net_price, variant, addons} = cartItem;
+              const itemTotal = net_price * quantity;
               return <div key={i} className='text-sm border border-restro-border-green-light rounded-lg p-2 relative'>
                 <p>#{i+1} {title} x {quantity}</p>
-                <p className='mt-1'>{currency}{Number(price).toFixed(2)} <span className='text-xs text-gray-500'>x {quantity}</span> <span className='font-bold'>= {currency}{itemTotal.toFixed(2)}</span></p>
+                <p className='mt-1'>{currency}{Number(net_price).toFixed(2)} <span className='text-xs text-gray-500'>x {quantity}</span> <span className='font-bold'>= {currency}{itemTotal.toFixed(2)}</span></p>
                 {notes && <p className="mt-1 text-xs text-gray-400">
                   Notes: {notes}
                 </p>
@@ -1084,9 +1121,9 @@ export default function POSPage() {
               <div className="flex flex-col gap-2 mt-2">
               {
                 menuItems.find((item)=>item.id==selectedItemId)?.variants?.map((variant, index)=>{
-                  const {id, item_id, title, price} = variant;
+                  const {id, title, net_price} = variant;
                   return <label key={index} className='cursor-pointer label justify-start gap-2'>
-                    <input type="radio" className='radio' name="variants" id="" value={id} defaultChecked={index==0} /><span className="label-text">{title} - {currency}{price}</span>
+                    <input type="radio" className='radio' name="variants" id="" value={id} defaultChecked={index==0} /><span className="label-text">{title} - {currency}{net_price}</span>
                   </label>
                 })
               }
@@ -1097,9 +1134,9 @@ export default function POSPage() {
               <div className="flex flex-col gap-2 mt-2">
               {
                 menuItems.find((item)=>item.id==selectedItemId)?.addons?.map((addon, index)=>{
-                  const {id, item_id, title, price} = addon;
+                  const {id, title, net_price} = addon;
                   return <label key={index} className='cursor-pointer label justify-start gap-2'>
-                    <input type="checkbox" name="addons" id="" className='checkbox  checkbox-sm' value={id} /><span className="label-text">{title} (+{currency}{price})</span>
+                    <input type="checkbox" name="addons" id="" className='checkbox  checkbox-sm' value={id} /><span className="label-text">{title} (+{currency}{net_price})</span>
                   </label>
                 })
               }
