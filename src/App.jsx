@@ -56,6 +56,7 @@ import TaxGroupsPage from "./views/SettingsViews/TaxGroupsPage";
 import InventoryItemsPage from "./views/InventoryItemsPage";
 import PrivacyPage from "./views/LandingPage/PrivacyPage";
 import TermsPage from "./views/LandingPage/TermsPage";
+import InventoryUnitsPage from "./views/InventoryUnitsPage";
 
 export default function App() {
   const [isNavbarCollapsed, setIsNavbarCollapsed] = useState(
@@ -188,8 +189,16 @@ export default function App() {
             <Route
               path="inventory"
               element={
-                <ScopeProtectedRoute scopes={[SCOPES.INVENTORY]}>
+                <ScopeProtectedRoute scopes={[SCOPES.STOCK]}>
                   <InventoryItemsPage />
+                </ScopeProtectedRoute>
+              }
+            />
+            <Route
+              path="inventory/units"
+              element={
+                <ScopeProtectedRoute scopes={[SCOPES.STOCK]}>
+                  <InventoryUnitsPage />
                 </ScopeProtectedRoute>
               }
             />

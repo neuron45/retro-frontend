@@ -21,7 +21,7 @@ export default function LadingPage() {
         <h3 className="text-3xl lg:text-5xl font-bold text-center">All-in-One POS</h3>
         <h3 className="text-3xl lg:text-5xl font-bold text-center">
           for <span className="text-restro-green">Your Food & Beverage</span>{" "}
-          Business.
+          Empire.
         </h3>
 
         <p className="text-gray-500 mt-8 text-center">
@@ -119,10 +119,28 @@ export default function LadingPage() {
             <li>✅ Live Kitchen Orders</li>
             <li>✅ Unlimited Users</li>
             <li>✅ QR Code orders</li>
-            <li>✅ Inventory Management</li>
+            <li>✅ Inventory Management for non-menu items</li>
             <li>✅ Customer Management</li>
             <li>✅ Kitchen order sound feedback</li>
             <li>✅ Real-time</li>
+          </ul>
+        </div>
+      </div>
+      {/* pricing */}
+
+      {/* pricing */}
+      <h3 className="text-4xl font-bold text-center container mx-auto mt-40">
+        Roadmap
+      </h3>
+      <div
+        id="road-map"
+        className="w-full container mx-auto grid grid-cols-1 my-20 gap-10 place-items-center px-6 lg:px-0"
+      >
+        <div className="rounded-2xl px-8 py-6 border flex flex-col w-full lg:w-96">
+          <ul className="text-gray-700 mt-6 flex flex-col gap-2 text-start">
+            <li>😃 Inventory Support for menu items : 10th Jan, 2025</li>
+            <li>😃 Customer order real-time feedback : 25th Jan, 2025</li>
+            <li>😃 Delivery management: 25th Feb, 2025</li>
           </ul>
         </div>
       </div>

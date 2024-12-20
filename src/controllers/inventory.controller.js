@@ -37,6 +37,35 @@ export function useInventoryUnits() {
     };
 }
 
+
+export async function updateInventoryUnit(id, title, quantity, description) {
+  const APIURL = `/inventory-items/units/update/${id}`;
+  try {
+    const response = await ApiClient.post(APIURL, {
+      title,
+      quantity,
+      description
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function addInventoryUnit(title, quantity, description) {
+  const APIURL = `/inventory-items/units/add`;
+  try {
+    const response = await ApiClient.post(APIURL, {
+      title,
+      quantity,
+      description
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function addInventoryItem(title, minimumStockLevel, unitId) {
     const APIURL = `/inventory-items/add`;
     try {

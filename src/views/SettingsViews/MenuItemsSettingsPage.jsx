@@ -245,7 +245,7 @@ export default function MenuItemsSettingsPage() {
               >
                 <option value="">None</option>
                 {
-                  taxGroups.map((taxGroup)=>{
+                  (taxGroups || []).map((taxGroup)=>{
                     return <option value={taxGroup.id} key={taxGroup.id}>{taxGroup.title}</option>
                   })
                 }

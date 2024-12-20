@@ -29,6 +29,12 @@ export default function LNavbar() {
           </a>
           <a
             className="hover:bg-gray-100 text-gray-700 rounded-full px-4 py-2 transition active:scale-95"
+            href="/#road-map"
+          >
+            Roadmap
+          </a>
+          <a
+            className="hover:bg-gray-100 text-gray-700 rounded-full px-4 py-2 transition active:scale-95"
             href="/#contact"
           >
             Contact

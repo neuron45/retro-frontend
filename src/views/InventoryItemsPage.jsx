@@ -299,7 +299,10 @@ const btnShowAddStock = (id, type) => {
   return (
     <Page>
       <div className="flex flex-wrap gap-4 flex-col md:flex-row md:items-center md:justify-between">
-        <h3 className="text-2xl" style={{marginBottom: "40px"}}>Inventory</h3>
+        <div className="flex flex-wrap gap-2 mb-8">
+          <a href="/dashboard/inventory"><h3 className="text-2xl" >Stock Management /</h3></a>
+          <a href="/dashboard/inventory/units"><h4 className="text-2xl text-gray-400">Units</h4></a>
+        </div>
 
         <div className="flex flex-wrap gap-2">
           <div className="bg-gray-100 px-2 py-1 rounded-lg flex items-center">
@@ -405,7 +408,8 @@ const btnShowAddStock = (id, type) => {
                   stockQuantity,
                   minimumStockLevel,
                   unitTitle,
-                  imageUrl
+                  imageUrl,
+                  unitQuantity,
                 } = item;
                 const imageURL = imageUrl ? getImageURL(imageUrl) : null;
 
@@ -420,7 +424,7 @@ const btnShowAddStock = (id, type) => {
                   <td>{title}</td>
                   <td>{stockQuantity}</td>
                   <td>{minimumStockLevel}</td>
-                  <td>{unitTitle}</td>
+                  <td>{unitTitle} of {unitQuantity}</td>
                   <td className="flex items-center gap-2">
                     <button
                       onClick={() => {
@@ -515,7 +519,7 @@ const btnShowAddStock = (id, type) => {
               >
                 {
                   (units || []).map(unit=>{
-                    return <option value={unit.id} key={unit.id}>{unit.title}</option>
+                    return <option value={unit.id} key={unit.id}>{unit.title} of {unit.quantity}</option>
                   })
                 }
               </select>

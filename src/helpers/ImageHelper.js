@@ -1,5 +1,8 @@
-import { API_IMAGES_BASE_URL } from "../config/config";
+import { API_IMAGES_BASE_URL, FRONTEND_DOMAIN } from "../config/config";
 
 export function getImageURL(path) {
-    return API_IMAGES_BASE_URL + path;
+    if (FRONTEND_DOMAIN.includes('localhost')) {
+        return API_IMAGES_BASE_URL + path;
+    }
+    return path;
 }

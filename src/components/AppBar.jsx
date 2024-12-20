@@ -126,11 +126,11 @@ export default function AppBar() {
       scopes: [SCOPES.INVOICES]
     },
     {
-      title: "Inventory",
+      title: "Stock Management",
       description: "",
       icon: <IconFileInvoice stroke={iconStroke} />,
       link: "/dashboard/inventory",
-      scopes: [SCOPES.INVENTORY]
+      scopes: [SCOPES.STOCK]
     },
     {
       title: "Users",

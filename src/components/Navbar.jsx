@@ -87,7 +87,7 @@ export default function Navbar() {
       scopes: [SCOPES.INVOICES]
     }, {
       type: "link",
-      text: "Inventory",
+      text: "Stock Management",
       icon: <IconFileInvoice stroke={iconStroke} />,
       path: "/dashboard/inventory",
       scopes: [SCOPES.INVOICES]
