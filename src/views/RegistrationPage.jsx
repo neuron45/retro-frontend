@@ -15,6 +15,7 @@ export default function RegistrationPage() {
     const bizName = e.target.biz_name.value;
     const email = e.target.username.value;
     const password = e.target.password.value;
+    const phone = e.target.phone.value;
 
     if(!bizName) {
       toast.error("Please provide business name!");
@@ -31,6 +32,10 @@ export default function RegistrationPage() {
       return;
     }
 
+    if (!phone) {
+      toast.error("Please provide phone number");
+    }
+
     if(!validateEmail(email)) {
       toast.error("Please provide valid email!");
       return;
@@ -39,7 +44,7 @@ export default function RegistrationPage() {
     try {
       toast.loading("Please wait...");
 
-      const res = await signUp(bizName, email, password);
+      const res = await signUp(bizName, email, password, phone);
       toast.dismiss();
       if (res.status == 200) {
         toast.success(res.data.message);
@@ -107,6 +112,19 @@ export default function RegistrationPage() {
                 name="username"
                 required
                 placeholder="Enter Your Email here..."
+                className="mt-1 block w-full bg-gray-100 px-4 py-3 rounded-xl"
+              />
+            </div>
+            <div className="mt-4">
+              <label className="block" htmlFor="username">
+                Phone
+              </label>
+              <input
+                type="phone"
+                id="phone"
+                name="phone"
+                required
+                placeholder="Enter Your phone here..."
                 className="mt-1 block w-full bg-gray-100 px-4 py-3 rounded-xl"
               />
             </div>

@@ -17,11 +17,11 @@ export async function signIn(username, password) {
     }
 }
 
-export async function signUp(biz_name, username, password) {
+export async function signUp(biz_name, username, password, phone) {
     axios.defaults.withCredentials = true;
     try {
         const response = await axios.post(`${API}/auth/signup`, {
-            biz_name, username, password
+            biz_name, username, password, phone
         });
 
         return response;
