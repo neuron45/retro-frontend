@@ -8,6 +8,7 @@ import {
 } from "@tabler/icons-react";
 import { subscriptionPrice } from "../../config/config";
 import Footer from "./Footer";
+import ContactForm from "./ContactForm";
 
 export default function LadingPage() {
   return (
@@ -147,7 +148,7 @@ export default function LadingPage() {
       {/* pricing */}
 
       {/* contact */}
-      <div id="contact" className="container mx-auto my-40 px-6 lg:px-0">
+      {/* <div id="contact" className="container mx-auto my-40 px-6 lg:px-0">
         <div
           className="lg:h-40 px-10 py-6 flex gap-4 flex-col md:flex-row lg:items-center rounded-3xl bg-restro-green-dark text-restro-green shadow-2xl shadow-red-700/40"
         >
@@ -156,12 +157,28 @@ export default function LadingPage() {
           </h3>
           <a
             className="bg-white text-lg text-restro-green-dark rounded-full px-5 py-3 transition active:scale-95 block"
-            href="mailto:hi@uiflow.in"
+            href="mailto:info@prodiner.net"
           >
             Contact us
           </a>
         </div>
+      </div> */}
+      {/* contact */}
+      <div id="contact" className="container mx-auto my-40 px-6 lg:px-0">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Contact Us
+          </h2>
+          <p className="text-lg text-gray-600">
+            Have any questions? We'd love to hear from you.
+          </p>
+        </div>
+        
+        <div className="bg-white rounded-2xl shadow-xl p-8">
+          <ContactForm />
+        </div>
       </div>
+      {/* contact */}
       
       {/* contact */}
 

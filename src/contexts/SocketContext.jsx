@@ -13,8 +13,10 @@ const SocketProvider = ({ children }) => {
     initSocket();
 
     socket.on('connect', () => {
-      socket.emit("authenticate", user.tenant_id);
-      setIsSocketConnected(true)
+      if (user.tenant_id) {
+        socket.emit("authenticate", user.tenant_id);
+        setIsSocketConnected(true)
+      }
     });
     socket.on('disconnect', () => setIsSocketConnected(false));
 
