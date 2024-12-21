@@ -19,6 +19,7 @@ import { getImageURL } from "../helpers/ImageHelper";
 import { AddFab } from "../components/Fab";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { formatDateTime } from "../utils/formatDate";
 
 
 
@@ -92,6 +93,7 @@ export default function InventoryItemsPage() {
 
   const resetFormFields = () => {
     const refs = [titleRef, minimumStockLevelRef, unitIdRef];
+    setItemTitle('');
     refs.forEach(ref => {
         if (ref.current) {
             ref.current.value = null;
@@ -126,7 +128,7 @@ const btnShowAddStock = (id, type) => {
 
 
   const btnUpdate = async() => {
-    const title = itemTitle || null;
+    const title = titleRef.current ? titleRef.current.value : itemTitle || null;
     const minimumStockLevel = minimumStockLevelRef.current.value || null;
     const unitId = unitIdRef.current.value || null;
     const id = currentId;
@@ -214,7 +216,7 @@ const btnShowAddStock = (id, type) => {
   };
 
   async function btnAdd() {
-    const title = titleRef.current.value;
+    const title = itemTitle || null;
     const minimumStockLevel = minimumStockLevelRef.current.value || null;
     const unitId = unitIdRef.current.value || null;
 
@@ -267,9 +269,14 @@ const btnShowAddStock = (id, type) => {
       return;
     }
 
+    if (!selectedDate) {
+      toast.error("Please select a date!");
+      return;
+    }
+
     try {
       toast.loading("Please wait...");
-      const res = await addInventoryMovememt(currentId, stockQuantity, remarks, type, unitPrice, selectedDate);
+      const res = await addInventoryMovememt(currentId, stockQuantity, remarks, type, unitPrice, formatDateTime(selectedDate));
 
       if(res.status == 200) {
         if (unitPriceRef.current) {
@@ -434,14 +441,14 @@ const btnShowAddStock = (id, type) => {
                     >
                       <IconPencil stroke={iconStroke} />
                     </button>
-                    <button
+                    {/* <button
                       onClick={() => {
                         btnDelete(id);
                       }}
                       className="mr-2 w-8 h-8 flex items-center justify-center text-red-500 hover:bg-gray-100 transition active:scale-95"
                     >
                       <IconEyeOff stroke={iconStroke} />
-                    </button>
+                    </button> */}
                     <button
                       onClick={() => {
                         btnShowAddStock(id, "add");
@@ -575,7 +582,7 @@ const btnShowAddStock = (id, type) => {
               selected={selectedDate}
               onChange={(date) => setSelectedDate(date)}
               showTimeSelect
-              dateFormat="MMMM d, yyyy h:mm aa"
+              dateFormat="yyyy-MM-dd HH:mm:ss"
               className="text-sm border rounded-lg px-4 py-2 bg-gray-50 outline-restro-border-green-light"
             />
           </div>
