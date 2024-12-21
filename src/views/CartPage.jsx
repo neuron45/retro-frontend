@@ -7,6 +7,7 @@ import { useLocation, useParams , useNavigate } from 'react-router-dom';
 import { toast } from "react-hot-toast";
 import { validatePhone } from '../utils/phoneValidator';
 import { SocketContext } from '../contexts/SocketContext';
+import { initSocket } from '../utils/socket';
 
 const CartPage = () => {
   const { socket, isSocketConnected } = useContext(SocketContext);
@@ -36,7 +37,6 @@ const CartPage = () => {
 
   useEffect(() => {
     const storedCart = getCart() || [];
-    console.log({storedCart})
     setState({ ...state, cartItems: storedCart });
     const { itemsTotal, taxTotal, payableTotal, taxBreakdown } = calculateOrderSummary(storedCart);
     setState((prevState) => ({ ...prevState, itemsTotal, taxTotal, payableTotal, taxBreakdown }));
@@ -182,7 +182,7 @@ const CartPage = () => {
       toast.dismiss();
       if(res.status == 200) {
         const data = res.data;
-        toast.success(res.data.message);
+        toast.success(data.message);
         document.getElementById("modal-place-order").close();
 
 
