@@ -36,6 +36,7 @@ const CartPage = () => {
 
   useEffect(() => {
     const storedCart = getCart() || [];
+    console.log({storedCart})
     setState({ ...state, cartItems: storedCart });
     const { itemsTotal, taxTotal, payableTotal, taxBreakdown } = calculateOrderSummary(storedCart);
     setState((prevState) => ({ ...prevState, itemsTotal, taxTotal, payableTotal, taxBreakdown }));

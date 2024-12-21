@@ -208,7 +208,7 @@ export default function POSPage() {
       ...item,
       quantity: 1,
       notes: null,
-      taxGroup: taxGroups.find(tg => tg.id === item.tax_group_id)
+      taxGroup: taxGroups.find(tg => tg.id == item.tax_group_id)
     }
 
     if(!cartItems) {

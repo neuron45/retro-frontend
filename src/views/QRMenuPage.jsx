@@ -424,8 +424,8 @@ export default function QRMenuPage() {
                             id,
                             image ? imageURL : null,
                             net_price,
-                            tax_group_id,
-                            title
+                            title,
+                            tax_group_id
                           )
                       : undefined
                   }
@@ -457,8 +457,8 @@ export default function QRMenuPage() {
                                 id,
                                 image ? imageURL : null,
                                 net_price,
-                                tax_group_id,
-                                title
+                                title,
+                                tax_group_id
                               );
                             } else {
                               addItemToCart(item);
