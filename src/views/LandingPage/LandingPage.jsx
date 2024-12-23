@@ -139,7 +139,8 @@ export default function LadingPage() {
       >
         <div className="rounded-2xl px-8 py-6 border flex flex-col w-full lg:w-96">
           <ul className="text-gray-700 mt-6 flex flex-col gap-2 text-start">
-            <li>😃 Inventory Support for menu items : 10th Jan, 2025</li>
+            <li>😃 Stock Management Support for menu items : 10th Jan, 2025</li>
+            <li>😃 Barcode generator for Stock Management : 15th Jan, 2025</li>
             <li>😃 Customer order real-time feedback : 25th Jan, 2025</li>
             <li>😃 Delivery management: 25th Feb, 2025</li>
           </ul>
